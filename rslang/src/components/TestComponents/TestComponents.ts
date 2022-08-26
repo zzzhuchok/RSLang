@@ -1,13 +1,4 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// export class TestComponents {
-//   drawTestComponents(): void {
-//     const bodyEl = document.body as HTMLBodyElement;
-
-//     const h1El = document.createElement("h1") as HTMLElement;
-//     h1El.textContent = "Hello, TestComponent!";
-//     bodyEl.appendChild(h1El);
-//   }
-// }
 
 import "./main.css"
 
@@ -16,10 +7,6 @@ export class TestComponents {
 
     const bodyEl = document.body as HTMLBodyElement;
 
-    // const kek = document.createElement("h1") as HTMLElement;
-    // bodyEl.appendChild(kek)
-    // kek.innerHTML = "RETARD"
-    
     // Header
     const headerEl = document.createElement("header") as HTMLBodyElement;
     headerEl.className = "header";
@@ -49,13 +36,6 @@ export class TestComponents {
       </ul>
     </nav>
   </div>`
-    // const appName = headerEl.querySelector(".app-login") as HTMLElement;
-    // let headerClassBtn:Array<string> = ["login-btn", "register-btn"];
-    // for(let i = 0; i < headerClassArr.length; i++) {
-    //   const authElements = document.createElement("button") as HTMLElement;
-    //   authElements.innerHTML = "login"
-    //   appName.appendChild(authElements);
-    // }
     
     const authMenu = document.querySelector('.app_login') as HTMLElement;
     authMenu.innerHTML = `<button class="login-btn">Вход</button>
@@ -91,30 +71,6 @@ export class TestComponents {
       menu.classList.toggle('active');
       
     })
-  //   const menuBtn = document.querySelector('.menu-btn') as HTMLElement;
-  //   const menu = document.querySelector('.menu') as HTMLElement;
-  //   menuBtn.addEventListener('click', function(){
-  //   menuBtn.classList.toggle('active');
-  //   menu.classList.toggle('active');
-  // })
-    // btnMenu.className = "c-hamburger c-hamburger-line";
-    // menuList.appendChild(btnMenu);
-    // const menuContent = document.createElement("span") as HTMLElement;
-    // btnMenu.appendChild(menuContent);
-    // (document.querySelector(".c-hamburger") as HTMLElement).addEventListener('click', function(e) {
-    //   e.preventDefault();
-    //   if(this.classList.contains('is-active')) {
-    //     this.classList.remove('is-active');
-    //     menuList.classList.remove('body-active');
-    //     document.body.classList.remove('body-active');
-    //   } else{
-        
-    //     this.classList.add('is-active');
-    //     menuList.classList.add('nav-active');
-    //     document.body.classList.add('body-active');
-    //   }
-    // })
-
 
     //headerEnd
 
