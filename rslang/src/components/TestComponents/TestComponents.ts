@@ -12,14 +12,18 @@ export class TestComponents {
     headerEl.className = "header";
     bodyEl.appendChild(headerEl);
 
+    const headerWrap = document.createElement("div") as HTMLElement;
+    headerWrap.className = "header-wrapper";
+    headerEl.appendChild(headerWrap);
+
     const headerClassArr: Array<string> = ["app_logo", "header_menu", "app_login", "menu_list"];
     for(let i = 0; i < headerClassArr.length; i++) {
       const headerDivs = document.createElement("div") as HTMLElement;
       headerDivs.className = headerClassArr[i];
-      headerEl.appendChild(headerDivs);
+      headerWrap.appendChild(headerDivs);
     }
 
-    const appLogo = headerEl.querySelector(".app_logo") as HTMLElement;
+    const appLogo = headerWrap.querySelector(".app_logo") as HTMLElement;
     const logoImg = document.createElement("div") as HTMLElement;
     logoImg.className = "img_app";
     appLogo.appendChild(logoImg);
@@ -32,7 +36,7 @@ export class TestComponents {
         <li><a href="#">Учебники</a></li>
         <li><a href="#">Игры</a></li>
         <li><a href="#">Статистика</a></li>
-        <li><a href="#">Настройка</a></li>
+        <li><a href="#">О команде</a></li>
       </ul>
     </nav>
   </div>`
@@ -43,58 +47,59 @@ export class TestComponents {
 
 
     
-    const menuList = headerEl.querySelector(".menu_list") as HTMLElement;
+    const menuList = headerWrap.querySelector(".menu_list") as HTMLElement;
     menuList.innerHTML = `<div class="menu">
       <nav>
         <ul>
           <li><a href="#">Учебники</a></li>
           <li><a href="#">Игры</a></li>
           <li><a href="#">Статистика</a></li>
-          <li><a href="#">Настройка</a></li>
+          <li><a href="#">О команде</a></li>
         </ul>
       </nav>
     </div>`
-    const btnMenu = document.createElement("button") as HTMLElement;
-    btnMenu.innerHTML = `<div class="menu-btn">
-		  <span></span>
-		  <span></span>
-		  <span></span>
-	  </div>`
-    headerEl.appendChild(btnMenu);
+    // const btnMenu = document.createElement("button") as HTMLElement;
+    // btnMenu.innerHTML = `<div class="menu-btn">
+		//   <span></span>
+		//   <span></span>
+		//   <span></span>
+	  // </div>`
+    // headerWrap.appendChild(btnMenu);
 
-    const menuBtn = document.querySelector('.menu-btn') as HTMLElement;
-    const menu = document.querySelector('.menu') as HTMLElement;
-    const menuElems = document.querySelector('.menu_list') as HTMLElement
-    menuBtn.addEventListener('click', function(){
-      menuElems.classList.toggle('active');
-      menuBtn.classList.toggle('active');
-      menu.classList.toggle('active');
+    // const menuBtn = document.querySelector('.menu-btn') as HTMLElement;
+    // const menu = document.querySelector('.menu') as HTMLElement;
+    // const menuElems = document.querySelector('.menu_list') as HTMLElement
+    // menuBtn.addEventListener('click', function(){
+    //   menuElems.classList.toggle('active');
+    //   menuBtn.classList.toggle('active');
+    //   menu.classList.toggle('active');
       
-    })
+    // })
 
     //headerEnd
 
     //Main
     const mainEl = document.createElement("main") as HTMLBodyElement;
     mainEl.className = "main";
+
     mainEl.innerHTML = `<div class="content_wrapper">
       <div class="left_content">
         <div class="about-block">
           <h1 class="content-title">STUDY ENGLISH</h1>
-          <h3 class="content-description">Нескучное онлайн-обучение английскому языку<br>
+          <p class="content-description">Нескучное онлайн-обучение английскому языку<br>
           с помощью игр и интересных заданий<br>
-          в любое удобное для вас время</h3>
+          в любое удобное для вас время</p>
           <button class="btn-start">Начать обучение</button>
         </div>
         <div class="reviews-block">
           <div class="active-users">
-            <h3 class="user-count">28k+</h3>
+            <p class="user-count">28k+</p>
             <p class="user-text">активных<br>
             пользователей<br>
             платформы</p>
           </div>
           <div class="teach-block">
-            <h3 class="teach-count">5 лет</h3>
+            <p class="teach-count">5 лет</p>
             <p class="teach-text">успешно обучаем<br>
             языку</p>
           </div>
@@ -117,11 +122,15 @@ export class TestComponents {
     footerEl.className = "footer";
     bodyEl.appendChild(footerEl);
 
+    const footerWrap = document.createElement('div');
+    footerWrap.className = "footer_wrapper";
+    footerEl.appendChild(footerWrap);
+
     const footerClassArr: Array<string> = ["dev_year", "devs_git", "rs_logo"];
     for(let i = 0; i < 3; i++) {
       const footerDivs = document.createElement("div") as HTMLElement;
       footerDivs.className = footerClassArr[i];
-      footerEl.appendChild(footerDivs);
+      footerWrap.appendChild(footerDivs);
     }
 
     const devYear = document.querySelector('.dev_year') as HTMLElement;
@@ -138,13 +147,13 @@ export class TestComponents {
       <a href="https://github.com/nvfnvm">nvfnvm</a>
     </span>
     <span class="developer2">
-      <a href="https://github.com/nvfnvm">shumak_k</a>
+      <a href="https://github.com/Konstantsin-Shumak">shumak_k</a>
     </span>
     <span class="developer3">
-      <a href="https://github.com/nvfnvm">zzzhuchok</a>
+      <a href="https://github.com/zzzhuchok">zzzhuchok</a>
     </span>
     <span class="developer4">
-      <a href="https://github.com/nvfnvm">whattablackhole</a>
+      <a href="https://github.com/whattablackhole">whattablackhole</a>
     </span>`
     
     const rsLogo = document.querySelector('.rs_logo') as HTMLElement;
