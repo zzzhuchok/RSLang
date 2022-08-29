@@ -302,7 +302,7 @@ footer {
   border: none;
 }
 
-body > footer > .footer_wrapper > div.devs_git > span > a {
+div.devs_git > span > a {
   text-decoration: none;
   color: #ffffff;
 }

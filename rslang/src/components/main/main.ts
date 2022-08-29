@@ -1,8 +1,6 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-
 import "./main.css"
 
-export class TestComponents {
+export class MainPage {
   drawTestComponents(): void {
 
     const bodyEl = document.body as HTMLBodyElement;

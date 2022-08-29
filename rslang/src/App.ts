@@ -1,9 +1,9 @@
-import { TestComponents } from "./components/TestComponents/TestComponents";
+import { MainPage } from "./components/main/main";
 
 export default class App {
-  testComponents = new TestComponents();
+  mainPage = new MainPage();
 
   start() {
-    this.testComponents.drawTestComponents();
+    this.mainPage.drawTestComponents();
   }
 }
