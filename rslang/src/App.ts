@@ -1,31 +1,20 @@
-import { MainPage } from "./Render";
-// import Router from "./Router";
-import "./RouterConstants"
-// import RouteConstants from "./RouterConstants";
+import { Footer } from "./components/Footer/Footer";
+import { Header } from "./components/Header/Header";
+import { MainPage } from "./components/MainPage/MainPage";
 
-export default class App {
+export class App {
+  header = new Header();
   mainPage = new MainPage();
+  footer = new Footer();
+
+  init() {
+    (document.querySelector('#page') as HTMLElement).innerHTML = '';
+    this.start();
+  }
 
   start() {
-    this.mainPage.drawMainComponents();
+    this.header.init();
+    this.mainPage.init();
+    this.footer.init();
   }
-
-  books() {
-    this.mainPage.drawBookComponents();
-  }
-
-
-
-  // private initRouter = () => {
-  //   new Router({
-  //     mode: RouteConstants.HASH,
-  //     root: RouteConstants.ROOT,
-  //   }).add(RouteConstants.BOOKS_PATH, () => {
-  //     alert('Welcome book page');
-  //     })
-  //   .add(RouteConstants.ABOUT_PATH, () => {
-  //       alert('Welcome about page')
-  //   })
-  // };  
 }
-
