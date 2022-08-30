@@ -1,6 +1,6 @@
 import { Footer } from "./components/Footer/Footer";
 import { Header } from "./components/Header/Header";
-import { MainPage } from "./components/MainPage/MainPage";
+import { MainPage } from "./pages/MainPage/MainPage";
 
 export class App {
   header = new Header();

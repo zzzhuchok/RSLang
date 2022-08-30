@@ -1,11 +1,15 @@
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
+import { Authentication } from "../Authentication/Authentication";
+
 export class Header {
 
-  /* Роутинг */
-  // textBook = new TextBook() - здесь создается экземпляр класса новой страницы (к примеру учебника)
+  authentication = new Authentication();
+  localStore = new LocalStoreAPI();
 
   init = ():void => {
     this.drawHeader();
     this.listen();
+    this.authentication.init();
   }
 
   drawHeader = ():void => {
@@ -18,8 +22,7 @@ export class Header {
   }
 
   getHeaderHtml = (): string => {
-    const isAuth = false;
-    const  name = 'anonymous';
+    const {isAuth, name = 'anonymous'} = this.localStore.getUser();
     const userName = (isAuth) ? name : '';
     const userStateAuth = (isAuth) ? '' : 'hidden';
     const btnAuthState = (isAuth) ? 'hidden' : '';
@@ -54,15 +57,17 @@ export class Header {
 
     if (elem.closest('#blockHeaderkAuth')) {
       if (elem.id === 'login') {
-        console.log('btnLogin');
+        (document.getElementById('formAuth') as HTMLElement).innerHTML = this.authentication.getFormHtml('login');
+        document.getElementById('popupFormAuth')?.classList.remove('hidden');
       }
 
       if (elem.id === 'registration') {
-        console.log('btnReg');
+        (document.getElementById('formAuth') as HTMLElement).innerHTML = this.authentication.getFormHtml('registration');
+        document.getElementById('popupFormAuth')?.classList.remove('hidden');
       }
 
       if (elem.closest('#logout')?.id === 'logout') {
-        console.log('btnLogout');
+        this.authentication.logoutUser();
       }
     }
 
@@ -73,9 +78,10 @@ export class Header {
           break;
         case 'textBook':
           console.log('textBook');
+          // this.textBook.init(); - здесь уже перерисовывается main и отображается учебник
           break;
         case 'miniGames':
-          // this.textBook.init(); - здесь уже перерисовывается main и отображается учебник
+          console.log('miniGames');
           break;
         case 'statistic':
           console.log('statistic');
