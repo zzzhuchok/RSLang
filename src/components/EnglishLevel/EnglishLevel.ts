@@ -1,3 +1,4 @@
+import { isAuthorized } from "../../services/isAuthorized";
 import { store } from "../../services/store";
 
 export class EnglishLevel {
@@ -12,9 +13,12 @@ export class EnglishLevel {
     const levelsEl = document.querySelector(
       ".textbook__level-block"
     ) as HTMLElement;
+    const elementsArray = isAuthorized()
+      ? ["A1", "A2", "B1", "B2", "C1", "C2", "HW"]
+      : ["A1", "A2", "B1", "B2", "C1", "C2"];
     levelsEl.innerHTML = `
       <ul class="textbook__level">
-      ${["A1", "A2", "B1", "B2", "C1", "C2"]
+      ${elementsArray
         .map(
           (element, index) =>
             `<li><button class="level__button ${this.isActiveGroup(

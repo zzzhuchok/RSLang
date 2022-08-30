@@ -9,6 +9,9 @@ export class TextBook {
   onFilterChange = async (): Promise<void> => {
     Loading();
     const data = await getWords(store.activePage - 1, store.group);
+    if (store.group > 5) {
+      alert("Hard WORDS!");
+    }
     this.words.drawWords(data);
   };
 
