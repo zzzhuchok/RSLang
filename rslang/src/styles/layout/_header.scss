@@ -1,0 +1,31 @@
+.header {
+  padding: 10px 0;
+  background: $white;
+  box-shadow: $header_shadow;
+}
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.header__nav {
+  display: flex;
+  column-gap: 60px;
+}
+.header__nav-link {
+  color: $text;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    color: $primery_hover;
+  }
+}
+.header__auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  padding: 0 10px;
+}

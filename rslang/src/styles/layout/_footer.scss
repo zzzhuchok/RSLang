@@ -1,0 +1,17 @@
+.footer {
+  padding: 15px 0;
+  background: $footer;
+  color: $white;
+}
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer__nav {
+  display: flex;
+  column-gap: 80px;
+}
+.footer__nav-link {
+  color: $white;
+}
