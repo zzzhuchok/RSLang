@@ -1,10 +1,10 @@
-import { LocalStorAPI } from "../API/LocalStorAPI";
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
 import { Authentication } from "../Authentication/Authentication";
 
 export class Header {
 
   authentication = new Authentication();
-  localStor = new LocalStorAPI();
+  localStore = new LocalStoreAPI();
 
   init = ():void => {
     this.drawHeader();
@@ -22,7 +22,7 @@ export class Header {
   }
 
   getHeaderHtml = (): string => {
-    const {isAuth, name = 'anonymous'} = this.localStor.getUser();
+    const {isAuth, name = 'anonymous'} = this.localStore.getUser();
     const userName = (isAuth) ? name : '';
     const userStateAuth = (isAuth) ? '' : 'hidden';
     const btnAuthState = (isAuth) ? 'hidden' : '';

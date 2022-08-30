@@ -5,7 +5,6 @@ export class MainPage {
   }
 
   drawPage = (): void => {
-
     const pageElement = document.querySelector('#page') as HTMLElement;
     const mainEl = document.createElement("main") as HTMLBodyElement;
     mainEl.className = "main";

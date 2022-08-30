@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { LearnWordsAPI } from "../API/LearnWordsAPI";
-import { LocalStorAPI } from "../API/LocalStorAPI";
-import { HttpError } from "../Errors/HttpErrors";
+import { LearnWordsAPI } from "../../services/API/LearnWordsAPI";
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
+import { HttpError } from "../../services/Errors/HttpErrors";
 
 export class Authentication {
 
-  localStor = new LocalStorAPI();
+  localStore = new LocalStoreAPI();
   learnWordsAPI = new LearnWordsAPI();
 
   init = ():void => {
@@ -106,7 +106,7 @@ export class Authentication {
 
       if (userData?.message === 'Authenticated') {
         document.getElementById('popupFormAuth')?.classList.add('hidden');
-        this.localStor.setUser(userData);
+        this.localStore.setUser(userData);
 
         // update header
         (document.getElementById('userProfile') as HTMLElement).innerHTML = userData.name;
@@ -138,10 +138,10 @@ export class Authentication {
   }
 
   logoutUser = () => {
-    const { name } = this.localStor.getUser();
+    const { name } = this.localStore.getUser();
 
     if (window.confirm(`${name}, Вы точно хотите выйти?`)) {
-      this.localStor.deleteUser();
+      this.localStore.deleteUser();
 
       // update header
       (document.getElementById('userProfile') as HTMLElement).classList.add('hidden');

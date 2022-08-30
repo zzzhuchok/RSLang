@@ -1,6 +1,6 @@
 import { HttpError } from "../Errors/HttpErrors";
 import { Auth, NewToken, Settings as Settings, Statistic, User, UserWord, Word } from "../Types/Types";
-import { LocalStorAPI } from "./LocalStorAPI";
+import { LocalStoreAPI } from "./LocalStoreAPI";
 
 export class LearnWordsAPI {
 
@@ -8,7 +8,7 @@ export class LearnWordsAPI {
   users = `${this.url}/users`;
   words = `${this.url}/words`;
   signIn = `${this.url}/signin`;
-  localStor = new LocalStorAPI();
+  localStore = new LocalStoreAPI();
 
 
   /* WORDS */
@@ -54,7 +54,7 @@ export class LearnWordsAPI {
   }
 
   getUserAPI = async (userId: string): Promise<User | undefined> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: 'GET',
       headers: {
@@ -80,7 +80,7 @@ export class LearnWordsAPI {
   }
 
   updateUserAPI = async (data: User, userId: string): Promise<User | void> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: 'PUT',
       headers: {
@@ -107,7 +107,7 @@ export class LearnWordsAPI {
   }
 
   deleteUserAPI = async (userId: string): Promise<void> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: 'DELETE',
       headers: {
@@ -128,7 +128,7 @@ export class LearnWordsAPI {
   }
 
   getNewUserTokenAPI = async (userId: string): Promise<NewToken> => {
-    const {refreshToken} = this.localStor.getUser();
+    const {refreshToken} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/tokens`, {
       method: 'GET',
       headers: {
@@ -138,14 +138,14 @@ export class LearnWordsAPI {
     });
 
     const userData = await response.json() as NewToken;
-    this.localStor.updateUser(userData.token, userData.refreshToken);
+    this.localStore.updateUser(userData.token, userData.refreshToken);
     return userData;
   }
 
   /* =============================================================================== */
   /* Users/ Words */
   getAllUserWordsAPI = async (userId: string): Promise<UserWord[]> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words`, {
       method: 'GET',
       headers: {
@@ -158,7 +158,7 @@ export class LearnWordsAPI {
   }
 
   createUserWordAPI = async (newWord: UserWord, userId: string, wordId: string) => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -174,7 +174,7 @@ export class LearnWordsAPI {
   }
 
   getUserWordAPI = async (userId: string, wordId: string): Promise<UserWord> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'GET',
       headers: {
@@ -187,7 +187,7 @@ export class LearnWordsAPI {
   }
 
   updateUserWordAPI = async (data: UserWord, userId: string, wordId: string): Promise<UserWord> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
@@ -202,7 +202,7 @@ export class LearnWordsAPI {
   }
 
   deleteUserWordAPI = async (userId: string, wordId: string): Promise<void> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'DELETE',
       headers: {
@@ -214,7 +214,7 @@ export class LearnWordsAPI {
   /* =============================================================================== */
   /* Users/AggregatedWords */
   getAllUserAggrWords = async (userId: string, wordsPerPage: string, filter: string, group?: string, page?: string) => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const groupValue = (group) ? `group=${group}` : '';
     const pageValue = (page) ? `&page=${page}` : '';
     const response = await fetch(`${this.users}/${userId}/aggregatedWords?${groupValue}${pageValue}&wordsPerPage=${wordsPerPage}&filter=${filter}`, {
@@ -233,7 +233,7 @@ export class LearnWordsAPI {
   /* =============================================================================== */
   /* Users/ Statistic */
   getUserStatisticAPI = async (userId: string): Promise<Statistic> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       method: 'GET',
       headers: {
@@ -246,7 +246,7 @@ export class LearnWordsAPI {
   }
 
   updateUserStatisticAPI = async (data: Statistic, userId: string): Promise<Statistic> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       method: 'PUT',
       headers: {
@@ -264,7 +264,7 @@ export class LearnWordsAPI {
 
   /* Users/ Setting */
   getUserSettingsAPI = async (userId: string): Promise<Settings> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/settings`, {
       method: 'GET',
       headers: {
@@ -277,7 +277,7 @@ export class LearnWordsAPI {
   }
 
   updateUserSettingsAPI = async (data: Settings, userId: string): Promise<Settings> => {
-    const {token} = this.localStor.getUser();
+    const {token} = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/settings`, {
       method: 'PUT',
       headers: {
