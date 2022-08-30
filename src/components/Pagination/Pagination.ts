@@ -8,7 +8,8 @@ export class Pagination {
   createPagination(
     totalPages: number,
     page: number,
-    paginationEl: HTMLElement
+    paginationUpEl: HTMLElement,
+    paginationDownEl: HTMLElement
   ): string {
     let liTag = "";
     let active;
@@ -77,18 +78,23 @@ export class Pagination {
         <button class="page-button next-page ${isNextDisable}">></button>
       </li>
       `;
-    paginationEl.innerHTML = liTag;
+    paginationUpEl.innerHTML = liTag;
+    paginationDownEl.innerHTML = liTag;
     return liTag;
   }
 
   drawPagination() {
-    const paginationEl = document.querySelector(
-      ".pagination ul"
+    const paginationUpEl = document.querySelector(
+      ".pagination-up ul"
     ) as HTMLElement;
-    paginationEl.innerHTML = this.createPagination(
+    const paginationDownEl = document.querySelector(
+      ".pagination-down ul"
+    ) as HTMLElement;
+    paginationUpEl.innerHTML = this.createPagination(
       store.totalPage,
       store.activePage,
-      paginationEl
+      paginationUpEl,
+      paginationDownEl
     );
 
     const paginationButtons = document.querySelectorAll(

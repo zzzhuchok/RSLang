@@ -20,12 +20,15 @@ export class TextBook {
     const appEl = document.getElementById("app") as HTMLElement;
     appEl.innerHTML = `
       <div class="textbook__wrapper">
-        <div class="pagination">
+        <div class="pagination-up">
           <ul class="pagination-content"></ul>
         </div>
-      <div class="textbook__block">
-        <div class="textbook__items"></div>
-      <div class="textbook__level-block"></div>
+        <div class="textbook__block">
+          <div class="textbook__items"></div>
+          <div class="textbook__level-block"></div>
+        </div>
+        <div class="pagination-down">
+          <ul class="pagination-content"></ul>
         </div>
       </div>
   `;
