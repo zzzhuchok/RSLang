@@ -78,10 +78,14 @@ export class Header {
           break;
         case 'textBook':
           console.log('textBook');
-          // this.textBook.init(); - здесь уже перерисовывается main и отображается учебник
           break;
         case 'miniGames':
-          console.log('miniGames');
+          import('./../../pages/Games/Games')
+            .then(page => {
+              const sprintGame = new page.Games();
+              sprintGame.init();
+            })
+            .catch(err => console.log(err));
           break;
         case 'statistic':
           console.log('statistic');

@@ -1,0 +1,16 @@
+.games {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.games__title {
+  margin: 0 0 20px 0;
+}
+.games__levels button {
+  padding: 10px;
+  border: 1px solid $text;
+  background: $primery_accent;
+  color: $white;
+  cursor: pointer;
+}
