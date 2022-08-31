@@ -1,6 +1,6 @@
-import App from "./App";
-import "./style.css";
+import { App } from "./App";
+import "./styles/style.scss";
 
 const app = new App();
 
-void app.start();
+app.start();

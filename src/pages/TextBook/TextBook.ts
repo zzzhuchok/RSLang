@@ -19,9 +19,9 @@ export class TextBook {
   pagination = new Pagination(this.onFilterChange);
   words = new Words();
 
-  async drawTextBookComponents() {
-    const appEl = document.getElementById("app") as HTMLElement;
-    appEl.innerHTML = `
+  drawTextBookComponents() {
+    const mainEl = document.querySelector("main") as HTMLElement;
+    mainEl.innerHTML = `
       <div class="textbook__wrapper">
         <div class="pagination-up">
           <ul class="pagination-content"></ul>
@@ -38,7 +38,8 @@ export class TextBook {
     Loading();
     this.pagination.drawPagination();
     this.englishLevel.drawEnglishLevel();
-    const data = await getWords(store.activePage - 1, store.group);
-    this.words.drawWords(data);
+    void getWords(store.activePage - 1, store.group).then((data) => {
+      this.words.drawWords(data);
+    });
   }
 }

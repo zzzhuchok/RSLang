@@ -22,13 +22,19 @@ export class Words {
         </div>
         <div class="item__info">
           <div class="info__header">
-            <span class="header__line"></span>
-            <div class="header__container">
-              <div class="title-transcription-block">
-                <span class="title">${item.word}</span>
-                <span class="transcription">${item.transcription}</span>
+            <span class="item__header__line"></span>
+            <div class="item__header__content">
+              <div class="item__title-transcription-block">
+                <span class="title-transcription-block__title">${
+                  item.word
+                }</span>
+                <span class="title-transcription-block__transcription">${
+                  item.transcription
+                }</span>
               </div>
-              <span class="translate">${item.wordTranslate}</span>
+              <span class="title-transcription-block__translate">${
+                item.wordTranslate
+              }</span>
             </div>
           </div>
           <div class="item__example">
