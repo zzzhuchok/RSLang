@@ -195,7 +195,6 @@ export class LearnWordsAPI {
         Accept: "application/json",
       },
     });
-    console.log(response);
     const word = (await response?.json()) as UserWord;
     return word;
   };
@@ -343,8 +342,12 @@ export class LearnWordsAPI {
   };
 
   isWordHard = async (userId: string, wordId: string): Promise<boolean> => {
-    const data = await this.getUserWordAPI(userId, wordId);
+    const data = await this.getAllUserWordsAPI(userId);
 
-    return data?.difficulty === "hard" ? true : false;
+    data.filter((element) => {
+      element.difficulty === "hard" && element.optional.id === wordId;
+    });
+
+    return data.length > 0 ? true : false;
   };
 }

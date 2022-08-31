@@ -41,7 +41,7 @@ export class TextBook {
 
   englishLevel = new EnglishLevel(this.onFilterChange);
   pagination = new Pagination(this.onFilterChange);
-  words = new Words();
+  words = new Words(this.onFilterChange);
 
   drawTextBookComponents(): void {
     const mainEl = document.querySelector("main") as HTMLElement;

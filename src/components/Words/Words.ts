@@ -7,6 +7,12 @@ export class Words {
   learnWordsApi = new LearnWordsAPI();
   localStoreApi = new LocalStoreAPI();
 
+  reDraw;
+
+  constructor(reDraw: () => void) {
+    this.reDraw = reDraw;
+  }
+
   drawWords(data: Array<IWord>): void {
     const textbookItems = document.querySelector(
       ".textbook__items"
@@ -122,6 +128,7 @@ export class Words {
         void this.learnWordsApi.deleteUserWordAPI(userId, item.id);
         ItemElement.classList.remove("hard");
         ItemElement.classList.add("learn");
+        this.reDraw();
       });
     }
     audioComponent.isAudioIconClick(item.id, item);
