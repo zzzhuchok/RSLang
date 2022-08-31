@@ -15,11 +15,13 @@
       "browser": true,
       "node": true
     },
+    "ignorePatterns": ["webpack.config.js"],
     "rules": {
       "no-debugger": "off",
       "no-console": 0,
       "class-methods-use-this": "off",
       "@typescript-eslint/no-inferrable-types": "off",
+      "no-mixed-spaces-and-tabs":"off",
       "import/prefer-default-export": "off",
       "no-param-reassign": ["error", { "props": false }]
     }
