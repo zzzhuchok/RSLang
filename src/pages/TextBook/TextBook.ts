@@ -1,9 +1,9 @@
-import { EnglishLevel } from "../components/EnglishLevel/EnglishLevel";
-import { Loading } from "../components/Loading/Loading";
-import { Pagination } from "../components/Pagination/Pagination";
-import { Words } from "../components/Words/Words";
-import { getWords } from "../services/api";
-import { store } from "../services/store";
+import { EnglishLevel } from "../../components/EnglishLevel/EnglishLevel";
+import { Loading } from "../../components/Loading/Loading";
+import { Pagination } from "../../components/Pagination/Pagination";
+import { Words } from "../../components/Words/Words";
+import { getWords } from "../../services/api";
+import { store } from "../../services/store";
 
 export class TextBook {
   onFilterChange = async (): Promise<void> => {

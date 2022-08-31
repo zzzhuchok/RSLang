@@ -1,4 +1,4 @@
-import { TextBook } from "./pages/TextBook";
+import { TextBook } from "./pages/TextBook/TextBook";
 
 export default class App {
   textBook = new TextBook();
