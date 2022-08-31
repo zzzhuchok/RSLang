@@ -99,7 +99,9 @@ export class Words {
         "item-" + item.id
       ) as HTMLElement;
       void this.learnWordsApi.isWordHard(userId, item.id).then((answer) => {
-        if (answer) ItemElement.classList.add("hard");
+        if (answer) {
+          ItemElement.classList.add("hard");
+        }
       });
 
       const hardButton = document.getElementById(
@@ -125,7 +127,10 @@ export class Words {
 
       learnButton?.addEventListener("click", () => {
         const { userId } = this.localStoreApi.getUser();
-        void this.learnWordsApi.deleteUserWordAPI(userId, item.id);
+        void this.learnWordsApi.deleteUserWordAPI(
+          userId,
+          "5e9f5ee35eb9e72bc21af4b5"
+        );
         ItemElement.classList.remove("hard");
         ItemElement.classList.add("learn");
         this.reDraw();

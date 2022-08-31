@@ -344,10 +344,10 @@ export class LearnWordsAPI {
   isWordHard = async (userId: string, wordId: string): Promise<boolean> => {
     const data = await this.getAllUserWordsAPI(userId);
 
-    data.filter((element) => {
-      element.difficulty === "hard" && element.optional.id === wordId;
-    });
-
-    return data.length > 0 ? true : false;
+    return (
+      data.filter((element) => {
+        return element.optional.id === wordId && element.difficulty === "hard";
+      }).length > 0
+    );
   };
 }
