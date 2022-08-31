@@ -1,9 +1,12 @@
-import { URL } from "../../services/api";
-import { isAuthorized } from "../../services/isAuthorized";
+import { LearnWordsAPI } from "../../services/API/LearnWordsAPI";
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
 import { IWord } from "../../type/IWord";
 import { AudioComponents } from "../Audio/AudioComponents";
 
 export class Words {
+  learnWordsApi = new LearnWordsAPI();
+  localStoreApi = new LocalStoreAPI();
+
   drawWords(data: Array<IWord>) {
     const textbookItems = document.querySelector(
       ".textbook__items"
@@ -13,12 +16,14 @@ export class Words {
       const itemEl = document.createElement("div") as HTMLElement;
       const audio = new AudioComponents();
       itemEl.classList.add("item");
-      if (isAuthorized()) {
+      if (this.localStoreApi.checkAuthUser()) {
         itemEl.classList.add("hard");
       }
       itemEl.innerHTML = `
         <div class="item__image-container">
-          <img src="${URL}/${item.image}" alt="photo:${item.word}">
+          <img src="${this.learnWordsApi.url}/${item.image}" alt="photo:${
+        item.word
+      }">
         </div>
         <div class="item__info">
           <div class="info__header">
@@ -47,9 +52,11 @@ export class Words {
           </div>
         </div>
         <div class="item__last-column">
-          <audio id="audio-${item.id}" src="${URL}/${item.audio}"></audio>
+          <audio id="audio-${item.id}" src="${this.learnWordsApi.url}/${
+        item.audio
+      }"></audio>
             ${
-              isAuthorized()
+              this.localStoreApi.checkAuthUser()
                 ? `
             <div class="counter-audio__container">
               <div class="item__counter-word">

@@ -80,7 +80,6 @@ export class Header {
           console.log("mainPage");
           break;
         case "textBook":
-          console.log("textBook");
           this.textbook.drawTextBookComponents();
           break;
         case "miniGames":

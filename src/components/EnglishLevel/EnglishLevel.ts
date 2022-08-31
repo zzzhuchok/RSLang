@@ -1,19 +1,20 @@
-import { isAuthorized } from "../../services/isAuthorized";
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
 import { store } from "../../services/store";
 
 export class EnglishLevel {
   onEnglishLevelChange;
-  constructor(onEnglishLevelChange: () => Promise<void>) {
+  constructor(onEnglishLevelChange: () => void) {
     this.onEnglishLevelChange = onEnglishLevelChange;
   }
   isActiveGroup(index: number): string {
     return index === store.group ? "--active" : "";
   }
   drawEnglishLevel() {
+    const localStoreApi = new LocalStoreAPI();
     const levelsEl = document.querySelector(
       ".textbook__level-block"
     ) as HTMLElement;
-    const elementsArray = isAuthorized()
+    const elementsArray = localStoreApi.checkAuthUser()
       ? ["A1", "A2", "B1", "B2", "C1", "C2", "HW"]
       : ["A1", "A2", "B1", "B2", "C1", "C2"];
     levelsEl.innerHTML = `

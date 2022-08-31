@@ -2,7 +2,7 @@ import { store } from "../../services/store";
 
 export class Pagination {
   onPageChange;
-  constructor(onPageChange: () => Promise<void>) {
+  constructor(onPageChange: () => void) {
     this.onPageChange = onPageChange;
   }
   createPagination(
