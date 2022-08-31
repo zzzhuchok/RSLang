@@ -6,10 +6,12 @@ export class EnglishLevel {
   constructor(onEnglishLevelChange: () => void) {
     this.onEnglishLevelChange = onEnglishLevelChange;
   }
-  isActiveGroup(index: number): string {
+
+  private isActiveGroup(index: number): string {
     return index === store.group ? "--active" : "";
   }
-  drawEnglishLevel() {
+
+  drawEnglishLevel(): void {
     const localStoreApi = new LocalStoreAPI();
     const levelsEl = document.querySelector(
       ".textbook__level-block"
@@ -28,7 +30,8 @@ export class EnglishLevel {
         )
         .join("")}
       </ul>`;
-
+  }
+  listener(): void {
     const levelButtonsEl = document.querySelectorAll(".level__button");
 
     levelButtonsEl.forEach((levelButtonEl) =>

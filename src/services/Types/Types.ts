@@ -1,32 +1,32 @@
-export interface Word {
-  id:	string;
-  group:	number;
-  page:	number;
-  word:	string;
-  image:	string;
-  audio:	string;
-  audioMeaning:	string;
-  audioExample:	string;
-  textMeaning:	string;
-  textExample:	string;
-  transcription:	string;
-  wordTranslate:	string;
-  textMeaningTranslate:	string;
-  textExampleTranslate:	string;
+export interface IWord {
+  id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  textExampleTranslate: string;
+  textMeaningTranslate: string;
+  wordTranslate: string;
 }
 
 export interface UserWord {
-  difficulty:	string;
-  optional: object;
+  difficulty: string;
+  optional: IWord;
 }
 
 export interface Statistic {
   learnedWords: number;
-  optional:	object;
+  optional: object;
 }
 
 export interface Settings {
-  wordsPerDay:	number;
+  wordsPerDay: number;
   optional: object;
 }
 

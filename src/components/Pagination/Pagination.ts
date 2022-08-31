@@ -17,20 +17,11 @@ export class Pagination {
     let afterPage: number = page + 1;
 
     const isPrevDisable = page > 1 ? "" : "disable";
-    liTag += `
-      <li>
-        <button class="page-button previous-page ${isPrevDisable}"><</button>
-      </li>`;
+    liTag += `<li><button class="page-button previous-page ${isPrevDisable}"><</button></li>`;
     if (page > 2) {
-      liTag += `
-      <li>
-        <button class="page-button current-page">1</button>
-      </li>`;
+      liTag += `<li><button class="page-button current-page">1</button></li>`;
       if (page > 3) {
-        liTag += `
-        <li>
-          <button class="page-button dots">...</button>
-        </li>`;
+        liTag += `<li><button class="page-button dots">...</button></li>`;
       }
     }
     if (
@@ -53,37 +44,24 @@ export class Pagination {
         plength = plength + 1;
       }
       active = store.activePage === plength ? "--active" : "";
-      liTag += `
-      <li>
-        <button class="page-button current-page ${active}">${plength}</button>
-      </li>
+      liTag += `<li><button class="page-button current-page ${active}">${plength}</button></li>
       `;
     }
 
     if (page < totalPages - 1) {
       if (page < totalPages - 2) {
-        liTag += `
-        <li>
-          <button class="page-button dots">...</button>
-        </li>`;
+        liTag += `<li><button class="page-button dots">...</button></li>`;
       }
-      liTag += `
-      <li>
-        <button class="page-button current-page">${totalPages}</button>
-      </li>`;
+      liTag += `<li><button class="page-button current-page">${totalPages}</button></li>`;
     }
     const isNextDisable = page < totalPages ? "" : "disable";
-    liTag += `
-      <li>
-        <button class="page-button next-page ${isNextDisable}">></button>
-      </li>
-      `;
+    liTag += `<li><button class="page-button next-page ${isNextDisable}">></button></li>`;
     paginationUpEl.innerHTML = liTag;
     paginationDownEl.innerHTML = liTag;
     return liTag;
   }
 
-  drawPagination() {
+  drawPagination(): void {
     const paginationUpEl = document.querySelector(
       ".pagination-up ul"
     ) as HTMLElement;
@@ -96,7 +74,9 @@ export class Pagination {
       paginationUpEl,
       paginationDownEl
     );
+  }
 
+  listener(): void {
     const paginationButtons = document.querySelectorAll(
       ".page-button:not(.dots)"
     );
@@ -116,6 +96,7 @@ export class Pagination {
         }
 
         this.drawPagination();
+        this.listener();
         void this.onPageChange();
       });
     });

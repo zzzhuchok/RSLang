@@ -6,7 +6,7 @@ import {
   Statistic,
   User,
   UserWord,
-  Word,
+  IWord,
 } from "../Types/Types";
 import { LocalStoreAPI } from "./LocalStoreAPI";
 
@@ -18,25 +18,25 @@ export class LearnWordsAPI {
   localStore = new LocalStoreAPI();
 
   /* WORDS */
-  getWordsAPI = async (group = 0, page = 0): Promise<Word[]> => {
+  getWordsAPI = async (group = 0, page = 0): Promise<Array<IWord>> => {
     const response = await fetch(`${this.words}?group=${group}&page=${page}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
       },
     });
-    const words = (await response.json()) as Array<Word>;
+    const words: Array<IWord> = (await response.json()) as Array<IWord>;
     return words;
   };
 
-  getWordAPI = async (wordId: string): Promise<Word> => {
+  getWordAPI = async (wordId: string): Promise<IWord> => {
     const response = await fetch(`${this.words}/${wordId}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
       },
     });
-    const word = (await response.json()) as Word;
+    const word = (await response.json()) as IWord;
     return word;
   };
 
@@ -186,7 +186,7 @@ export class LearnWordsAPI {
   getUserWordAPI = async (
     userId: string,
     wordId: string
-  ): Promise<UserWord> => {
+  ): Promise<UserWord | void> => {
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "GET",
@@ -195,7 +195,8 @@ export class LearnWordsAPI {
         Accept: "application/json",
       },
     });
-    const word = (await response.json()) as UserWord;
+    console.log(response);
+    const word = (await response?.json()) as UserWord;
     return word;
   };
 
@@ -214,7 +215,7 @@ export class LearnWordsAPI {
       },
       body: JSON.stringify(data),
     });
-    const word = (await response.json()) as UserWord;
+    const word = (await response?.json()) as UserWord;
     return word;
   };
 
@@ -339,5 +340,11 @@ export class LearnWordsAPI {
 
     const dataAuth = (await response.json()) as Auth;
     return dataAuth;
+  };
+
+  isWordHard = async (userId: string, wordId: string): Promise<boolean> => {
+    const data = await this.getUserWordAPI(userId, wordId);
+
+    return data?.difficulty === "hard" ? true : false;
   };
 }

@@ -1,4 +1,4 @@
-import { IWord } from "../../type/IWord";
+import { IWord } from "../../services/Types/Types";
 
 export class AudioComponents {
   isPause: boolean = false;
