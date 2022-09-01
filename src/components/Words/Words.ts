@@ -1,5 +1,6 @@
 import { LearnWordsAPI } from "../../services/API/LearnWordsAPI";
 import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
+import { store } from "../../services/store";
 import { IWord } from "../../services/Types/Types";
 import { AudioComponents } from "../Audio/AudioComponents";
 
@@ -94,16 +95,6 @@ export class Words {
 
   private listener(id: string, item: IWord, audioComponent: AudioComponents) {
     if (this.localStoreApi.checkAuthUser()) {
-      const { userId } = this.localStoreApi.getUser();
-      const ItemElement = document.getElementById(
-        "item-" + item.id
-      ) as HTMLElement;
-      void this.learnWordsApi.isWordHard(userId, item.id).then((answer) => {
-        if (answer) {
-          ItemElement.classList.add("hard");
-        }
-      });
-
       const hardButton = document.getElementById(
         `${id}-hard-button`
       ) as HTMLButtonElement;
@@ -111,31 +102,67 @@ export class Words {
         `${id}-learn-button`
       ) as HTMLButtonElement;
 
+      const { userId } = this.localStoreApi.getUser();
+
+      hardButton.classList.remove("disable");
+      learnButton.classList.remove("disable");
+
+      const itemElement = document.getElementById(
+        "item-" + item.id
+      ) as HTMLElement;
+
+      this.checkWord("hard", userId, item.id, itemElement, hardButton);
+      this.checkWord("learn", userId, item.id, itemElement, learnButton);
+
       hardButton?.addEventListener("click", () => {
-        const { userId } = this.localStoreApi.getUser();
-        void this.learnWordsApi.createUserWordAPI(
-          {
-            difficulty: "hard",
-            optional: { ...item },
-          },
-          userId,
-          id
-        );
-        ItemElement.classList.remove("learn");
-        ItemElement.classList.add("hard");
+        this.obButtonsClick("hard", userId, id, item, itemElement);
       });
 
       learnButton?.addEventListener("click", () => {
-        const { userId } = this.localStoreApi.getUser();
-        void this.learnWordsApi.deleteUserWordAPI(
-          userId,
-          "5e9f5ee35eb9e72bc21af4b5"
-        );
-        ItemElement.classList.remove("hard");
-        ItemElement.classList.add("learn");
-        this.reDraw();
+        this.obButtonsClick("learn", userId, id, item, itemElement);
       });
     }
     audioComponent.isAudioIconClick(item.id, item);
+  }
+
+  private checkWord(
+    type: string,
+    userId: string,
+    id: string,
+    itemElement: HTMLElement,
+    button: HTMLButtonElement
+  ) {
+    void this.learnWordsApi.isWordUser(type, userId, id).then((answer) => {
+      if (answer) {
+        itemElement.classList.add(type);
+        button.classList.add("disable");
+      }
+    });
+  }
+  private obButtonsClick(
+    type: string,
+    userId: string,
+    id: string,
+    item: IWord,
+    itemElement: HTMLElement
+  ) {
+    void this.learnWordsApi.createUserWordAPI(
+      {
+        difficulty: type,
+        optional: { ...item },
+      },
+      userId,
+      id
+    );
+    if (type === "hard") {
+      itemElement.classList.remove("learn");
+      itemElement.classList.add("hard");
+    } else {
+      itemElement.classList.remove("hard");
+      itemElement.classList.add("learn");
+      if (store.group > 5) {
+        this.reDraw();
+      }
+    }
   }
 }

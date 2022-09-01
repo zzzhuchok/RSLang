@@ -179,6 +179,9 @@ export class LearnWordsAPI {
       body: JSON.stringify(newWord),
     });
 
+    if (response.status === 417) {
+      return await this.updateUserWordAPI(newWord, userId, wordId);
+    }
     const userWord = (await response.json()) as UserWord;
     return userWord;
   };
@@ -341,13 +344,17 @@ export class LearnWordsAPI {
     return dataAuth;
   };
 
-  isWordHard = async (userId: string, wordId: string): Promise<boolean> => {
+  isWordUser = async (
+    type: string,
+    userId: string,
+    wordId: string
+  ): Promise<string> => {
     const data = await this.getAllUserWordsAPI(userId);
 
-    return (
-      data.filter((element) => {
-        return element.optional.id === wordId && element.difficulty === "hard";
-      }).length > 0
-    );
+    return data.filter((element) => {
+      return element.optional.id === wordId && element.difficulty === type;
+    }).length > 0
+      ? type
+      : "";
   };
 }

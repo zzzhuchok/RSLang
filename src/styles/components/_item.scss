@@ -153,6 +153,11 @@ svg:hover path {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.last-column__buttons > button:hover:not(.disable) {
+  opacity: 0.8;
 }
 
 .item__hard-button {
@@ -165,4 +170,10 @@ svg:hover path {
   background-color: #fff;
   border: 0.5px solid #a6a6a6;
   color: #39393b;
+}
+
+.item__hard-button.disable,
+.item__learn-button.disable {
+  cursor: auto;
+  opacity: 0.5;
 }
