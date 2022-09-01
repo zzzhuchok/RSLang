@@ -94,10 +94,11 @@ export class Pagination {
         } else {
           store.activePage = Number(button.textContent);
         }
-
+        if (!button.classList.contains("disable")) {
+          void this.onPageChange();
+        }
         this.drawPagination();
         this.listener();
-        void this.onPageChange();
       });
     });
   }
