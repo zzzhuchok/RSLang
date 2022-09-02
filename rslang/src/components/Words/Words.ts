@@ -89,11 +89,12 @@ export class Words {
       </div>
     `;
       textbookItems.appendChild(itemEl);
-      this.listener(item.id, item, audio);
+      this.listener(item.id, item);
+      audio.isAudioIconClick(item.id, item);
     });
   }
 
-  private listener(id: string, item: IWord, audioComponent: AudioComponents) {
+  private listener(id: string, item: IWord) {
     if (this.localStoreApi.checkAuthUser()) {
       const hardButton = document.getElementById(
         `${id}-hard-button`
@@ -111,34 +112,37 @@ export class Words {
         "item-" + item.id
       ) as HTMLElement;
 
-      this.checkWord("hard", userId, item.id, itemElement, hardButton);
-      this.checkWord("learn", userId, item.id, itemElement, learnButton);
+      void this.checkWord("hard", userId, item.id, itemElement, hardButton);
+      void this.checkWord("learn", userId, item.id, itemElement, learnButton);
 
-      hardButton?.addEventListener("click", () => {
-        this.obButtonsClick("hard", userId, id, item, itemElement);
+      hardButton?.addEventListener("click", (event) => {
+        if (!(event?.target as HTMLButtonElement).classList.contains("disable"))
+          this.obButtonsClick("hard", userId, id, item, itemElement);
       });
 
-      learnButton?.addEventListener("click", () => {
-        this.obButtonsClick("learn", userId, id, item, itemElement);
+      learnButton?.addEventListener("click", (event) => {
+        if (!(event?.target as HTMLButtonElement).classList.contains("disable"))
+          this.obButtonsClick("learn", userId, id, item, itemElement);
       });
     }
-    audioComponent.isAudioIconClick(item.id, item);
   }
 
-  private checkWord(
+  private async checkWord(
     type: string,
     userId: string,
     id: string,
     itemElement: HTMLElement,
     button: HTMLButtonElement
-  ) {
-    void this.learnWordsApi.isWordUser(type, userId, id).then((answer) => {
+  ): Promise<void> {
+    await this.learnWordsApi.isWordUser(type, userId, id).then((answer) => {
       if (answer) {
         itemElement.classList.add(type);
         button.classList.add("disable");
+        button.disabled = true;
       }
     });
   }
+
   private obButtonsClick(
     type: string,
     userId: string,
@@ -146,6 +150,13 @@ export class Words {
     item: IWord,
     itemElement: HTMLElement
   ) {
+    if (type === "hard") {
+      itemElement.classList.remove("learn");
+      itemElement.classList.add("hard");
+    } else {
+      itemElement.classList.remove("hard");
+      itemElement.classList.add("learn");
+    }
     void this.learnWordsApi.createUserWordAPI(
       {
         difficulty: type,
@@ -154,15 +165,8 @@ export class Words {
       userId,
       id
     );
-    if (type === "hard") {
-      itemElement.classList.remove("learn");
-      itemElement.classList.add("hard");
-    } else {
-      itemElement.classList.remove("hard");
-      itemElement.classList.add("learn");
-      if (store.group > 5) {
-        this.reDraw();
-      }
+    if (store.group > 5) {
+      this.reDraw();
     }
   }
 }
