@@ -166,7 +166,7 @@ export class Words {
       id
     );
     if (store.group > 5) {
-      this.reDraw();
+      itemElement.remove();
     }
   }
 }
