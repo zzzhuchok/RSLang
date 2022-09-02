@@ -81,6 +81,7 @@ export class LearnWordsAPI {
       throw new HttpError(response.status, response.statusText);
     }
 
+
     const userData = (await response.json()) as User;
     return userData;
   };
