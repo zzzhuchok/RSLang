@@ -53,7 +53,6 @@ export class Header {
 
   /* HANDLERS */
   handleHeaderClick = (evt: Event): void => {
-    // evt.preventDefault();
     const elem = evt.target as HTMLButtonElement;
 
     if (elem.closest("#blockHeaderkAuth")) {
@@ -78,9 +77,6 @@ export class Header {
       switch (elem.id) {
         case "mainPage":
           console.log("mainPage");
-          break;
-        case "textBook":
-          // this.textbook.drawTextBookComponents();
           break;
         case "miniGames":
           console.log("miniGames");
