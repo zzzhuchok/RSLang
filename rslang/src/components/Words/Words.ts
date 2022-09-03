@@ -122,7 +122,7 @@ export class Words {
         this.obButtonsClick("learn", userId, id, item, itemElement);
       });
     }
-    audioComponent.isAudioIconClick(item.id, item);
+    audioComponent.isAudioIconClick(item.id, this.learnWordsApi.url, item);
   }
 
   private checkWord(

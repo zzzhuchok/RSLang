@@ -24,18 +24,19 @@ export class AudioComponents {
     return audioHTML;
   }
 
-  isAudioIconClick = (id: string, item: IWord) => {
+  isAudioIconClick = (id: string, url: string, item: IWord) => {
     const audioEl = document.getElementById(id) as HTMLElement;
     const audioPlayer = document.querySelector(
       `#audio-${id}`
     ) as HTMLAudioElement;
 
     audioEl.addEventListener("click", () => {
+      let queue = 0;
       this.stopAllAudio(audioEl, audioPlayer);
       if (this.isEnyonePlaying()) {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
-        audioPlayer.src = item.audio;
+        audioPlayer.src = `${url}/${item.audio}`;
 
         this.isPause = false;
         audioEl.innerHTML = this.drawAudioIcon();
@@ -44,11 +45,24 @@ export class AudioComponents {
           this.isPause = true;
           audioEl.innerHTML = this.drawAudioIcon();
         });
+
+        audioPlayer.onended = () => {
+          queue++;
+          if (queue === 1) {
+            audioPlayer.src = `${url}/${item.audioExample}`;
+            void audioPlayer.play();
+          }
+          if (queue === 2) {
+            audioPlayer.src = `${url}/${item.audioMeaning}`;
+            void audioPlayer.play();
+          }
+          if (queue > 2) {
+            this.isPause = false;
+            audioEl.innerHTML = this.drawAudioIcon();
+            queue = 0;
+          }
+        };
       }
-      audioPlayer.onended = () => {
-        this.isPause = false;
-        audioEl.innerHTML = this.drawAudioIcon();
-      };
     });
   };
 
@@ -70,7 +84,6 @@ export class AudioComponents {
       }
     });
   };
-
   isEnyonePlaying = (): boolean => {
     const audiosPlayer = document.querySelectorAll("audio");
     let isPlaying = false;
