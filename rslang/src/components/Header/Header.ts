@@ -72,25 +72,6 @@ export class Header {
         this.authentication.logoutUser();
       }
     }
-
-    if (elem.closest("#nav") || elem.closest("#mainPage")) {
-      switch (elem.id) {
-        case "mainPage":
-          console.log("mainPage");
-          break;
-        case "miniGames":
-          console.log("miniGames");
-          break;
-        case "statistic":
-          console.log("statistic");
-          break;
-        case "team":
-          console.log("team");
-          break;
-        default:
-          break;
-      }
-    }
   };
 
   listen(): void {
