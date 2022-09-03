@@ -9,17 +9,29 @@ import { IWord } from "../../services/Types/Types";
 
 export class TextBook {
   onReDraw = (): void => {
-    Loading();
-
     if (Number(localStorage.getItem("group")) !== store.group) {
       store.activePage = 1;
       this.pagination.drawPagination();
       this.pagination.listener();
     }
 
-    void getWords().then((data: Array<IWord>) => this.words.drawWords(data));
-    localStorage.setItem("page", String(store.activePage));
-    localStorage.setItem("group", String(store.group));
+    if (
+      Number(localStorage.getItem("group")) !== store.group ||
+      Number(localStorage.getItem("page")) !== store.activePage
+    ) {
+      Loading();
+      void getWords().then((data: Array<IWord>) => this.words.drawWords(data));
+      localStorage.setItem("page", String(store.activePage));
+      localStorage.setItem("group", String(store.group));
+    }
+    const paginations = document.querySelectorAll(".pagination-content");
+    if (store.group === 6) {
+      paginations.forEach((pagination) => pagination.classList.add("hidden"));
+    } else {
+      paginations.forEach((pagination) =>
+        pagination.classList.remove("hidden")
+      );
+    }
   };
 
   englishLevel = new EnglishLevel(this.onReDraw);
@@ -49,6 +61,12 @@ export class TextBook {
     this.englishLevel.drawEnglishLevel();
     this.englishLevel.listener();
 
-    void getWords().then((data: Array<IWord>) => this.words.drawWords(data));
+    void getWords().then((data: Array<IWord>) => {
+      if (store.group === 6) {
+        const paginations = document.querySelectorAll(".pagination-content");
+        paginations.forEach((pagination) => pagination.classList.add("hidden"));
+      }
+      this.words.drawWords(data);
+    });
   }
 }
