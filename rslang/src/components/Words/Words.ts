@@ -66,7 +66,7 @@ export class Words {
       ${
         this.localStoreApi.checkAuthUser()
           ? `
-      <div class="counter-audio__container">
+      <div class="counter-audio__block">
         <div class="item__counter-word">
           <div class="counter-word__correct">2</div>  
           <div class="counter-word__mistake">6</div>  
