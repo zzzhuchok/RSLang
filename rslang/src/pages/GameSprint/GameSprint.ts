@@ -1,39 +1,75 @@
-import { Word } from '../../services/Types/Types';
+import { Loading } from '../../components/Loading/Loading';
+import { LearnWordsAPI } from '../../services/API/LearnWordsAPI';
+import { controlGameSprint, Word } from '../../services/Types/Types';
 
 export class SprintGame {
 
-  cntPageWord: number;
-  cntWord: number;
   arrWords: Word[][];
-  currentWordTranslate: string;
+  currentWordTranslateDisplay: string;
   arrCorrectAnswers: Word[];
   arrIncorrectAnswers: Word[];
+  timerFinish: number;
+  timerClock: number;
+  control: controlGameSprint;
+  countCorrectAnswers: number;
+  points: number;
 
-  MAX_PAGE = 3;
-  MAX_WORDS_PAGE = 20;
+  learnWords = new LearnWordsAPI();
 
-  constructor() {
-    this.cntPageWord = 0;
-    this.cntWord = 0;
+  constructor(private initialValue: {state: 'games' | 'textbook', level: number, page?: number}) {
+    this.initialValue = initialValue;
+    this.control = {
+      maxPage: 0,
+      maxWordsPage: 0,
+      countPage: 0,
+      countWord: 0,
+    }
 
     this.arrWords = [];
-    this.currentWordTranslate = '';
+    this.currentWordTranslateDisplay = '';
+    this.countCorrectAnswers = 0;
+    this.points = 0;
+
+    this.timerFinish = 0;
+    this.timerClock = 0;
 
     this.arrCorrectAnswers = [];
     this.arrIncorrectAnswers = [];
   }
 
-  drawPage = () => {
+  async init() {
+    const main = document.querySelector('main') as HTMLElement;
+
+    Loading(main);
+
+    this.arrWords = (this.initialValue.state === 'games') ?
+      await this.getWordsFromCommonBase(this.initialValue.level) :
+      await this.getWordsFromTextbook(this.initialValue.level, this.initialValue.page);
+
+      this.control.maxPage = this.arrWords.length;
+      this.control.maxWordsPage = this.arrWords[0].length;
+
+      console.log(this.arrWords);
+
+    this.drawPage();
+    this.listen();
+    this.startClockUpdate(30);
+    this.startTimeGame(30);
+  }
+
+
+  /* DRAW & REDRAW*/
+  drawPage() {
     (document.querySelector('main') as HTMLElement).innerHTML = `
       <section class="game-sprint" id="gameSprint">
         <div class="game-sprint__wrapper">
-          <div class="game-sprint__card-score">24</div>
+          <div class="game-sprint__card-score" id="sprintPoints">0</div>
           <div class="game-sprint__card-word">
             <div class="card-word__top">
               <div class="card-word__progress">
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
+                <span data-progress="0">1</span>
+                <span data-progress="1">2</span>
+                <span data-progress="2">3</span>
               </div>
               <img src="./sprint_img-card.png" alt="cat">
             </div>
@@ -53,53 +89,78 @@ export class SprintGame {
 
         <div class="game-sprint__popup hidden">
           <div class="popup-sprint">
-            <h3 class="popup-sprint__title">Ваш результат: +${100500} очков</h3>
-            <div class="popup-sprint__incorrect-answers" id="listIncorrectAnswers">
-              <div class="popup-sprint__incorrect-cnt">ОШИБОК: <span id="sprintCntIncorrect">${this.arrIncorrectAnswers.length}</span></div>
+            <div class="popup-sprint__top">
+              <div class="popup-sprint__top-left">
+                <img src="./sprint_result.png" alt="cat">
+              </div>
+              <div class="popup-sprint__top-right">
+                <h3 class="popup-sprint__title">Ваш результат:</h3>
+                <div class="popup-sprint__subtitle"><span id="sprintTotalPoints">0</span> очков</div>
+              </div>
             </div>
-            <div class="popup-sprint__correct-answers" id="listCorrectAnswers">
-              <div class="popup-sprint__correct-cnt">ВЕРНО: <span id="sprintCntCorrect">${this.arrCorrectAnswers.length}</span></div>
+
+            <div class="popup-sprint__middle">
+              <div class="popup-sprint__answers popup-sprint__incorrect-answers" id="listIncorrectAnswers">
+                <div class="popup-sprint__cnt popup-sprint__cnt--incorrect">
+                  ОШИБОК: <span id="sprintCntIncorrect">0</span>
+                </div>
+              </div>
+              <div class="popup-sprint__answers popup-sprint__correct-answers" id="listCorrectAnswers">
+                <div class="popup-sprint__cnt popup-sprint__cnt--correct">
+                  ВЕРНО: <span id="sprintCntCorrect">0</span>
+                </div>
+              </div>
             </div>
-            <div class="popup-sprint__btns">
-              <button class="popup-sprint__btn-relay btn btn--primery" id="sprintStartAgain">Начать заново</button>
-              <button class="popup-sprint__btn-exit btn" id="backToGames">К списку игр</button>
+
+            <div class="popup-sprint__bottom">
+              <div class="popup-sprint__btns">
+                <button class="popup-sprint__btn-relay btn btn--primery" id="sprintStartAgain">Начать заново</button>
+                <button class="popup-sprint__btn-exit btn" id="backToGames">К списку игр</button>
+              </div>
             </div>
           </div>
         </div>
       </section>
     `;
-    this.listen();
-    this.finishGame();
-    // this.startTimer();
   }
 
-  drawCardWord = () => {
+  drawCardWord() {
     (document.querySelector('.card-word__bottom') as HTMLElement).innerHTML = this.getHTMLCard();
     this.listen();
   }
 
-  getHTMLCard = () => {
-    console.log(`cntPage: ${this.cntPageWord}; cntWord: ${this.cntWord}`);
-    const {word, wordTranslate: translateTrue} = this.arrWords[this.cntPageWord][this.cntWord];
-    let randomWordObj = this.getRandomWord();
+  private drawAnswersInPopup() {
+    const correctAnswers = this.getResultAnswers('correct');
+    const incorrectAnswers = this.getResultAnswers('incorrect');
 
-    while (translateTrue === randomWordObj.wordTranslate) {
-      randomWordObj = this.getRandomWord();
-    }
+    (document.querySelector('#sprintTotalPoints') as HTMLElement).textContent = `${this.points}`;
 
-    const {wordTranslate: translateFalse} = randomWordObj;
+    (document.querySelector('#sprintCntIncorrect') as HTMLElement).innerHTML = `${this.arrIncorrectAnswers.length}`;
+    (document.querySelector('#sprintCntCorrect') as HTMLElement).innerHTML = `${this.arrCorrectAnswers.length}`;
 
-    console.log('TRANSLATES: ',translateTrue, translateFalse);
+    (document.querySelector('#listCorrectAnswers') as HTMLElement).appendChild(correctAnswers);
+    (document.querySelector('#listIncorrectAnswers') as HTMLElement).appendChild(incorrectAnswers);
+  }
 
-    const wordTranslate = (Math.random() > 0.5) ? translateTrue : translateFalse;
-    this.currentWordTranslate = wordTranslate;
+  private redrawPoints() {
+    const points = document.querySelector('#sprintPoints') as HTMLElement;
+    points.innerText = `${this.points}`;
+  }
+  /* ======================================================================================================== */
+
+  /* GET SOMETHING*/
+  private getHTMLCard() {
+    const {countPage, countWord} = this.control;
+    const {word, wordTranslate: translateTrue} = this.arrWords[countPage][countWord];
+    const {wordTranslate: translateFalse} = this.getRandomTranslate();
+    this.currentWordTranslateDisplay = (Math.random() > 0.5) ? translateTrue : translateFalse;
 
     return `
       <div class="card-word__word-en">${word}</div>
-      <div class="card-word__word-ru">${wordTranslate}</div>
+      <div class="card-word__word-ru">${this.currentWordTranslateDisplay}</div>
       <div class="card-word__block-btn">
-        <button class="card-word__btn-no btn btn--incorrect" type="button" data-check-translate="${translateFalse}" id="sprintBtnNo">Неверно</button>
-        <button class="card-word__btn-yes btn btn--correct" type="button" data-check-translate="${translateTrue}" id="sprintBtnYes">Верно</button>
+        <button class="card-word__btn btn btn--incorrect" type="button" data-check-translate="${translateFalse}" id="btnFalseAnswer">Неверно</button>
+        <button class="card-word__btn btn btn--correct" type="button" data-check-translate="${translateTrue}" id="btnTrueAnswer">Верно</button>
       </div>
       <div class="card-word__block-img-btn">
         <img src="./icons/arrow-left.svg" alt="left">
@@ -108,127 +169,224 @@ export class SprintGame {
     `
   }
 
-  getRandomWord = (): Word => this.arrWords[this.cntPageWord][Math.floor(Math.random() * this.arrWords[this.cntPageWord].length)];
+  private async getWordsFromCommonBase(level: number): Promise<Word[][]> {
+    const arrRandomPage = this.getRandomPages();
+    const arrWordsForGame = await Promise.all(arrRandomPage.map(async (pageRandom) => await this.learnWords.getWordsAPI(level, pageRandom)));
+    return arrWordsForGame;
+  }
 
-  getResultAnswers = (result: 'correct' | 'incorrect') => {
+  private async getWordsFromTextbook(level: number, page: number | undefined) {
+    const arrWordsForGame = [];
+    let cntPage = (page) ? page : -1;
+    while (cntPage >= 0) {
+      arrWordsForGame.push(await this.learnWords.getWordsAPI(level, cntPage));
+      cntPage -= 1;
+    }
+    return arrWordsForGame;
+  }
+
+  private getRandomTranslate(): Word {
+    const {countPage, countWord} = this.control;
+    const {wordTranslate: translateTrue} = this.arrWords[countPage][countWord];
+
+    let randomWord = this.getRandomWord();
+    while (translateTrue === randomWord.wordTranslate) {
+      randomWord = this.getRandomWord();
+    }
+
+    return randomWord
+  }
+
+  private getRandomPages(page = 3) {
+    return Array(page).fill(1).map(el => el * Math.floor(Math.random() * 30));
+  }
+
+  private getRandomWord(): Word {
+    return this.arrWords[this.control.countPage][Math.floor(Math.random() * this.arrWords[this.control.countPage].length)];
+  }
+
+  private getResultAnswers(result: 'correct' | 'incorrect') {
     const arrAnswer = (result === 'correct') ? this.arrCorrectAnswers : this.arrIncorrectAnswers;
     const fragment = document.createDocumentFragment();
     for (const item of arrAnswer) {
       const div = document.createElement('div');
       div.className = 'popup-sprint__word';
-      div.innerHTML = `<span>${item.word}</span> ${item.transcription} - ${item.wordTranslate}`;
+      div.innerHTML = `<span>${item.word}</span> - ${item.wordTranslate}`;
       fragment.appendChild(div);
     }
     return fragment;
   }
+  /* ======================================================================================================== */
 
+  /* TIMERS */
+  private startClockUpdate = (time: number): void => {
+    const timerText = document.querySelector('.timer__count') as HTMLElement;
 
-  startTimer = (): void => {
-    const endTime = Date.now() + 15000;
-
-    const timerText = document.querySelector('.game-sprint__timer') as HTMLElement;
-
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const time = endTime - now;
-
-      if (time >= 0) {
-        const sec = Math.floor((time % (1000 * 60)) / 1000);
-        timerText.innerHTML = `${sec}`;
-      } else {
-        console.log('The end...');
-        clearInterval(timer);
-      }
-    }, 1000);
-  }
-
-  finishGame = () => {
     setTimeout(() => {
-      const popup = document.querySelector('.game-sprint__popup') as HTMLElement;
-      popup.classList.remove('active');
+      const endTime = Date.now() + time * 1000;
+      this.timerClock = window.setInterval(() => {
+        const now = Date.now();
+        const time = endTime - now;
 
-      const correctAnswers = this.getResultAnswers('correct');
-      const incorrectAnswers = this.getResultAnswers('incorrect');
+        if (time >= 0) {
 
-      (document.getElementById('sprintCntIncorrect') as HTMLElement).innerHTML = this.arrIncorrectAnswers.length.toString();
-      (document.getElementById('sprintCntCorrect') as HTMLElement).innerHTML = this.arrCorrectAnswers.length.toString();
+          const sec = Math.floor((time % (1000 * 60)) / 1000);
+          timerText.innerText = `${sec}`;
+        } else {
+          clearInterval(this.timerClock);
+        }
+      },  1000);
+    }, 1000)
 
-      (document.getElementById('listCorrectAnswers') as HTMLElement).appendChild(correctAnswers);
-      (document.getElementById('listIncorrectAnswers') as HTMLElement).appendChild(incorrectAnswers);
-
-      console.log('correct: ', this.arrCorrectAnswers);
-      console.log('incorrect: ', this.arrIncorrectAnswers);
-    }, 15000);
   }
 
+  private startTimeGame(time: number) {
+    this.timerFinish = window.setTimeout(() => {
+      this.finishGame();
+    }, (time + 1) * 1000);
+  }
 
+  private startGameAgain() {
+    this.points = 0;
+    this.countCorrectAnswers = 0;
+    this.control.countPage = 0;
+    this.control.countWord = 0;
+    this.arrCorrectAnswers = [];
+    this.arrIncorrectAnswers = [];
+    this.init().catch(err => console.log(err));
+  }
+
+  private finishGame(): void {
+    window.clearTimeout(this.timerFinish);
+    window.clearInterval(this.timerClock);
+    document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
+    document.querySelector('.game-sprint__wrapper')?.classList.add('hidden');
+
+    const popup = document.querySelector('.game-sprint__popup') as HTMLElement;
+    popup.classList.remove('hidden');
+
+    this.drawAnswersInPopup();
+    console.log('finish GAME');
+  }
+
+  private closeGame(): void {
+    window.clearTimeout(this.timerFinish);
+    window.clearInterval(this.timerClock);
+    console.log('close GAME');
+  }
+  /* ======================================================================================================== */
+
+  /* CHECK */
+  private checkAvalibilityPage() {
+    const {countWord, maxPage, maxWordsPage} = this.control;
+
+    if (countWord === maxWordsPage - 1) {
+      this.control.countWord = 0;
+      this.control.countPage += 1;
+
+      if (this.control.countPage === maxPage) {
+        console.log('слова закончились');
+        return false;
+      }
+    }
+    this.control.countWord += 1;
+    return true;
+  }
+
+  private checkAnswer(answer: boolean, word: Word) {
+    if (answer) {
+      this.arrCorrectAnswers.push(word);
+      this.applyCorrectAnswerStyle();
+      this.points += 10;
+      this.redrawPoints();
+    } else {
+      this.arrIncorrectAnswers.push(word);
+      this.applyIncorrectAnswerStyle();
+    }
+  }
+  /* ======================================================================================================== */
+
+  /* APPLY */
+  private applyCorrectAnswerStyle() {
+    if (this.countCorrectAnswers < 3) {
+      (document.querySelector(`[data-progress="${this.countCorrectAnswers}"]`) as HTMLElement).style.background = '#48ce76';
+      this.countCorrectAnswers += 1;
+    } else {
+      (document.querySelector('.game-sprint__card-word') as HTMLElement).style.outlineColor = '#efc83e';
+      setTimeout(() => (document.querySelector('.game-sprint__card-word') as HTMLElement).style.outlineColor = 'transparent', 250)
+      this.countCorrectAnswers += 1;
+    }
+  }
+
+  private applyIncorrectAnswerStyle() {
+    const progress = document.querySelectorAll('[data-progress]');
+    progress.forEach(el => (el as HTMLElement).style.background = '#F2695C');
+    window.setTimeout(() => progress.forEach(el => (el as HTMLElement).style.background = '#D9D9D9'), 250);
+    (document.querySelector('.game-sprint__card-word') as HTMLElement).style.outlineColor = 'transparent';
+    this.countCorrectAnswers = 0;
+  }
+  /* ======================================================================================================== */
 
   /* HANDLERS */
-  handleBtnsWordCardClick = (evt: Event) => {
-    const elem = evt.target as HTMLElement;
-
-    if (elem.hasAttribute('data-check-translate')) {
-      const selectTranslate = elem.dataset.checkTranslate;
-      const word = this.arrWords[this.cntPageWord][this.cntWord];
-
-      console.log(selectTranslate, this.currentWordTranslate);
-
-      if (selectTranslate === this.currentWordTranslate) {
-        console.log(true, 'УГАДАНО', word);
-        this.arrCorrectAnswers.push(word);
-      } else {
-        console.log(false, 'НЕ УГАДАНО: ', this.arrWords[this.cntPageWord][this.cntWord]);
-        this.arrIncorrectAnswers.push(word);
-      }
-    }
-
-    if (elem.classList.contains('btn')) {
-      if (this.cntWord < this.MAX_WORDS_PAGE - 1 && this.cntPageWord === this.MAX_PAGE - 1) {
-        console.log('слова закончились');
-        return;
-      }
-
-      if (this.cntWord < this.MAX_WORDS_PAGE - 1) {
-        this.cntWord += 1;
-      } else {
-        this.cntPageWord += 1;
-        this.cntWord = 0;
-      }
-
-      this.drawCardWord();
-    }
-  }
-
   handlePageGameSprintClick = (evt: Event) => {
     const elem = evt.target as HTMLElement;
 
-
-    if (elem.id === 'sprintStartAgain') {
-      this.cntPageWord = 0;
-      this.cntWord = 0;
-      this.arrCorrectAnswers = [];
-      this.arrIncorrectAnswers = [];
-      this.drawPage();
+    if (elem.hasAttribute('data-check-translate')) {
+      const word = this.arrWords[this.control.countPage][this.control.countWord];
+      const answer = (elem.dataset.checkTranslate === this.currentWordTranslateDisplay);
+      this.checkAnswer(answer, word);
+      if (!this.checkAvalibilityPage()) {
+        this.finishGame();
+        return;
+      }
+      this.drawCardWord();
     }
 
-    if (elem.id === 'backToGames') {
-      console.log('uti-puti');
-      import('../Games/Games')
-        .then(component => new component.Games().init())
-        .catch(err => console.log(err))
+    if (elem.closest('#sprintStartAgain')) {
+      this.startGameAgain();
     }
 
-    if (elem.closest('#btnCloseSprint')) {
-      console.log('closeGame');
+    if (elem.closest('#backToGames') || elem.closest('#btnCloseSprint')) {
+      this.closeGame();
+      document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
       import('../Games/Games')
         .then(component => new component.Games().init())
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
+    }
+  }
+
+  handlePageGameSprintKeydown = (evt: KeyboardEvent) => {
+    evt.preventDefault();
+
+    const word = this.arrWords[this.control.countPage][this.control.countWord];
+    const btnTrueAnswer = document.querySelector('#btnTrueAnswer') as HTMLButtonElement;
+    const btnFalseAnswer = document.querySelector('#btnFalseAnswer') as HTMLButtonElement;
+
+    if (evt.code === 'ArrowLeft') {
+      btnFalseAnswer.style.transform = 'scale(0.93)';
+      const answer = (btnFalseAnswer.dataset.checkTranslate === this.currentWordTranslateDisplay);
+      this.checkAnswer(answer, word);
+      if (!this.checkAvalibilityPage()) {
+        this.finishGame();
+        return;
+      }
+      window.setTimeout(() => this.drawCardWord(), 150);
+    }
+
+    if (evt.code === 'ArrowRight') {
+      btnTrueAnswer.style.transform = 'scale(0.93)';
+      const answer = (btnTrueAnswer.dataset.checkTranslate === this.currentWordTranslateDisplay);
+      this.checkAnswer(answer, word);
+      if (!this.checkAvalibilityPage()) {
+        this.finishGame();
+        return;
+      }
+      window.setTimeout(() => this.drawCardWord(), 150);
     }
   }
 
   listen() {
-    document.querySelector('.card-word__block-btn')?.addEventListener('click', this.handleBtnsWordCardClick);
     document.querySelector('#gameSprint')?.addEventListener('click', this.handlePageGameSprintClick);
-
+    document.addEventListener('keydown', this.handlePageGameSprintKeydown);
   }
 }
