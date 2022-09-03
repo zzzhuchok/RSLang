@@ -29,6 +29,7 @@
   padding: 20px;
   border-radius: 20px;
   background: $white;
+  outline: 3px solid transparent;
 }
 .card-word__top,
 .card-word__bottom {
@@ -78,9 +79,6 @@
 
 
 .timer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 82px;
   height: 82px;
   padding: 10px;
@@ -92,7 +90,11 @@
   z-index: 10;
 }
 .timer__count {
-  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: $primery_accent;
   font-size: 32px;
@@ -105,7 +107,7 @@
   position: absolute;
   top: 60px;
   right: 60px;
-  z-index: 10;
+  z-index: 12;
 }
 .game-sprint__close svg {
   fill: $white;
@@ -127,45 +129,115 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 11;
 
   &.hidden {
     display: none;
   }
 }
 .popup-sprint {
-  width: 600px;
-  padding: 40px;
-  background: $bg;
-}
-.popup-sprint > *:not(:last-child) {
-  margin: 0 0 20px 0;
-}
-.popup-sprint__title {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-}
-.popup-sprint__incorrect-cnt {
-  margin: 0 0 10px 0;
-  color: $difficult_btn;
-}
-.popup-sprint__correct-cnt {
-  margin: 0 0 10px 0;
-  color: $correct;
-}
-.popup-sprint__word {
+  width: 440px;
+  padding: 25px 25px;
+  background: $white;
+  border-radius: 20px;
 
-  &:not(:last-child) {
-    margin: 0 0 2.5px 0;
+  & > *:not(:last-child) {
+    margin: 0 0 20px 0;
   }
 }
-.popup-sprint__word span{
-  color: $text;
+.popup-sprint__top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+.popup-sprint__top-right {
+  font-size: 24px;
   font-weight: 700;
+  text-align: center;
+
+  & > *:not(:last-child) {
+    margin: 0 0 10px 0;
+  }
+}
+.popup-sprint__top-right span {
+  color: $correct;
+}
+.popup-sprint__middle {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  max-height: 290px;
+  padding: 20px;
+  background: $bg;
+  border-radius: 20px;
+  overflow-y: scroll;
+}
+.popup-sprint__cnt {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  font-weight: 700;
+
+  &--correct {
+    color: $correct;
+  }
+
+  &--incorrect {
+    color: $difficult_btn;
+  }
+}
+.popup-sprint__word {
+  margin: 0 0 10px 0;
+
+  &:last-child {
+    margin: 0;
+  }
+
+  & span {
+    color: $primery_accent;
+  }
 }
 .popup-sprint__btns {
   display: flex;
-  justify-content: center;
-  column-gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+  width: 235px;
+  margin: 0 auto;
 }
+.popup-sprint__btn-exit,
+.popup-sprint__btn-relay {
+  width: 100%;
+}
+
+
+
+
+// .popup-sprint__title {
+//   font-size: 24px;
+//   font-weight: bold;
+//   text-align: center;
+// }
+// .popup-sprint__incorrect-cnt {
+//   margin: 0 0 10px 0;
+//   color: $difficult_btn;
+// }
+// .popup-sprint__correct-cnt {
+//   margin: 0 0 10px 0;
+//   color: $correct;
+// }
+// .popup-sprint__word {
+
+//   &:not(:last-child) {
+//     margin: 0 0 2.5px 0;
+//   }
+// }
+// .popup-sprint__word span{
+//   color: $text;
+//   font-weight: 700;
+// }
+// .popup-sprint__btns {
+//   display: flex;
+//   justify-content: center;
+//   column-gap: 20px;
+// }
