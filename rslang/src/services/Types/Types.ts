@@ -58,3 +58,10 @@ export interface UserStore {
   refreshToken: string;
   userId: string;
 }
+
+export interface controlGameSprint {
+  maxPage: number;
+  maxWordsPage: number;
+  countPage: number;
+  countWord: number;
+}
