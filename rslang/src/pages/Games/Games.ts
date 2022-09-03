@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { LearnWordsAPI } from '../../services/API/LearnWordsAPI';
 
-
 export class Games {
 
   learnWords = new LearnWordsAPI();
@@ -28,35 +27,20 @@ export class Games {
 
 
   /* HANDLERS */
-  handleBtnLevelsClick = async (evt: Event) => {
+  handleBtnLevelsClick = (evt: Event) => {
     const elem = evt.target as HTMLElement;
 
     if (elem.hasAttribute('data-page-words')) {
 
       const level = Number(elem.dataset.pageWords);
-      const arrRandomPage = Array(3).fill(1).map(el => el * Math.floor(Math.random() * 30));
-
-      const arrWordsForGame = await Promise.all(arrRandomPage.map(async (page) => await this.learnWords.getWordsAPI(level, page)));
-
-      // console.log('RandomPage', arrRandomPage);
-      // console.log('arrWords', arrWordsForGame);
-
-      // this.sprintGame.arrWords = arrWordsForGame;
-
       import('../GameSprint/GameSprint')
         .then(component => {
-          const sprintGame = new component.SprintGame();
-          sprintGame.arrWords = arrWordsForGame;
-          sprintGame.drawPage();
+          const sprintGame = new component.SprintGame({state: 'games', level});
+          sprintGame.init().catch(err => console.log(err));
         })
         .catch((err) => console.log(err));
-
-
-      // this.sprintGame.drawPage();
     }
-
   }
-
 
   listen() {
     document.querySelector('#sectionGames')?.addEventListener('click', this.handleBtnLevelsClick);
