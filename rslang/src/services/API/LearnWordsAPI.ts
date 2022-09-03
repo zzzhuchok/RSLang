@@ -81,7 +81,6 @@ export class LearnWordsAPI {
       throw new HttpError(response.status, response.statusText);
     }
 
-
     const userData = (await response.json()) as User;
     return userData;
   };
@@ -170,7 +169,7 @@ export class LearnWordsAPI {
     wordId: string
   ) => {
     const { token } = this.localStore.getUser();
-    return fetch(`${this.users}/${userId}/words/${wordId}`, {
+    const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -178,13 +177,10 @@ export class LearnWordsAPI {
         Accept: "application/json",
       },
       body: JSON.stringify(newWord),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .catch(() => {
-        return this.updateUserWordAPI(newWord, userId, wordId);
-      });
+    });
+
+    const userWord = (await response.json()) as UserWord;
+    return userWord;
   };
 
   getUserWordAPI = async (
