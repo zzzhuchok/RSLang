@@ -13,8 +13,11 @@ export class Pagination {
   ): string {
     let liTag = "";
     let active;
-    let beforePage: number = page - 1;
-    let afterPage: number = page + 1;
+    let prevPage: number = page - 1;
+    let nextPage: number = page + 1;
+
+    if (prevPage < 1) prevPage = 1;
+    if (nextPage < 1) nextPage = 1;
 
     const isPrevDisable = page > 1 ? "" : "disable";
     liTag += `<li><button class="page-button previous-page ${isPrevDisable}"><</button></li>`;
@@ -29,14 +32,14 @@ export class Pagination {
       page === totalPages - 1 ||
       page === totalPages - 2
     ) {
-      beforePage = 26;
+      prevPage = 26;
     }
 
     if (page === 1 || page === 2 || page === 3) {
-      afterPage = 5;
+      nextPage = 5;
     }
 
-    for (let plength = beforePage; plength <= afterPage; plength++) {
+    for (let plength = prevPage; plength <= nextPage; plength++) {
       if (plength > totalPages) {
         continue;
       }
