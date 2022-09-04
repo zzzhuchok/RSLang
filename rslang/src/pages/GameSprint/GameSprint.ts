@@ -53,8 +53,8 @@ export class SprintGame {
 
     this.drawPage();
     this.listen();
-    this.startClockUpdate(30);
-    this.startTimeGame(30);
+    this.startClockUpdate(60);
+    this.startTimeGame(60);
   }
 
 

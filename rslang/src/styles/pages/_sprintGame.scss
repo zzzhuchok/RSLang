@@ -103,18 +103,16 @@
 }
 
 .game-sprint__close {
+  width: 30px;
+  height: 30px;
   background: transparent;
   position: absolute;
   top: 60px;
   right: 60px;
   z-index: 12;
-}
-.game-sprint__close svg {
-  fill: $white;
-  transition: fill 0.3s ease-in-out;
 
-  &:hover {
-    fill: $primery_hover;
+  & svg {
+    fill: $white;
   }
 }
 
@@ -209,35 +207,3 @@
 .popup-sprint__btn-relay {
   width: 100%;
 }
-
-
-
-
-// .popup-sprint__title {
-//   font-size: 24px;
-//   font-weight: bold;
-//   text-align: center;
-// }
-// .popup-sprint__incorrect-cnt {
-//   margin: 0 0 10px 0;
-//   color: $difficult_btn;
-// }
-// .popup-sprint__correct-cnt {
-//   margin: 0 0 10px 0;
-//   color: $correct;
-// }
-// .popup-sprint__word {
-
-//   &:not(:last-child) {
-//     margin: 0 0 2.5px 0;
-//   }
-// }
-// .popup-sprint__word span{
-//   color: $text;
-//   font-weight: 700;
-// }
-// .popup-sprint__btns {
-//   display: flex;
-//   justify-content: center;
-//   column-gap: 20px;
-// }
