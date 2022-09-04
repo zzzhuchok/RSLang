@@ -1,4 +1,5 @@
 import { EnglishLevel } from "../../components/EnglishLevel/EnglishLevel";
+import { GameLinks } from "../../components/GameLinks/GameLinks";
 import { Loading } from "../../components/Loading/Loading";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { Words } from "../../components/Words/Words";
@@ -34,6 +35,7 @@ export class TextBook {
     }
   };
 
+  gameLinks = new GameLinks();
   englishLevel = new EnglishLevel(this.onReDraw);
   pagination = new Pagination(this.onReDraw);
   words = new Words(this.onReDraw);
@@ -55,6 +57,8 @@ export class TextBook {
       </div>
   `;
     Loading();
+    this.gameLinks.drawGameLinks();
+
     this.pagination.drawPagination();
     this.pagination.listener();
 
