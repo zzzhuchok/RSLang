@@ -1,31 +1,32 @@
+import { TextBook } from "../../pages/TextBook/TextBook";
 import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
 import { Authentication } from "../Authentication/Authentication";
 
 export class Header {
-
   authentication = new Authentication();
+  textbook = new TextBook();
   localStore = new LocalStoreAPI();
 
-  init = ():void => {
+  init = (): void => {
     this.drawHeader();
     this.listen();
     this.authentication.init();
-  }
+  };
 
-  drawHeader = ():void => {
-    const pageElement = document.querySelector('#page') as HTMLElement;
-    const header = document.createElement('header');
-    header.className = 'header';
-    header.setAttribute('id', 'header');
+  drawHeader = (): void => {
+    const pageElement = document.querySelector("#page") as HTMLElement;
+    const header = document.createElement("header");
+    header.className = "header";
+    header.setAttribute("id", "header");
     header.innerHTML = this.getHeaderHtml();
     pageElement.prepend(header);
-  }
+  };
 
   getHeaderHtml = (): string => {
-    const {isAuth, name = 'anonymous'} = this.localStore.getUser();
-    const userName = (isAuth) ? name : '';
-    const userStateAuth = (isAuth) ? '' : 'hidden';
-    const btnAuthState = (isAuth) ? 'hidden' : '';
+    const { isAuth, name = "anonymous" } = this.localStore.getUser();
+    const userName = isAuth ? name : "";
+    const userStateAuth = isAuth ? "" : "hidden";
+    const btnAuthState = isAuth ? "hidden" : "";
 
     return `
       <div class="header__container">
@@ -48,36 +49,38 @@ export class Header {
         </div>
       </div>
     `;
-  }
+  };
 
   /* HANDLERS */
   handleHeaderClick = (evt: Event): void => {
     evt.preventDefault();
     const elem = evt.target as HTMLButtonElement;
 
-    if (elem.closest('#blockHeaderkAuth')) {
-      if (elem.id === 'login') {
-        (document.getElementById('formAuth') as HTMLElement).innerHTML = this.authentication.getFormHtml('login');
-        document.getElementById('popupFormAuth')?.classList.remove('hidden');
+    if (elem.closest("#blockHeaderkAuth")) {
+      if (elem.id === "login") {
+        (document.getElementById("formAuth") as HTMLElement).innerHTML =
+          this.authentication.getFormHtml("login");
+        document.getElementById("popupFormAuth")?.classList.remove("hidden");
       }
 
-      if (elem.id === 'registration') {
-        (document.getElementById('formAuth') as HTMLElement).innerHTML = this.authentication.getFormHtml('registration');
-        document.getElementById('popupFormAuth')?.classList.remove('hidden');
+      if (elem.id === "registration") {
+        (document.getElementById("formAuth") as HTMLElement).innerHTML =
+          this.authentication.getFormHtml("registration");
+        document.getElementById("popupFormAuth")?.classList.remove("hidden");
       }
 
-      if (elem.closest('#logout')?.id === 'logout') {
+      if (elem.closest("#logout")?.id === "logout") {
         this.authentication.logoutUser();
       }
     }
 
-    if (elem.closest('#nav') || elem.closest('#mainPage')) {
-      switch(elem.id) {
-        case 'mainPage':
-          console.log('mainPage');
+    if (elem.closest("#nav") || elem.closest("#mainPage")) {
+      switch (elem.id) {
+        case "mainPage":
+          console.log("mainPage");
           break;
-        case 'textBook':
-          console.log('textBook');
+        case "textBook":
+          this.textbook.drawTextBookComponents();
           break;
         case 'miniGames':
           import('./../../pages/Games/Games')
@@ -87,19 +90,21 @@ export class Header {
             })
             .catch(err => console.log(err));
           break;
-        case 'statistic':
-          console.log('statistic');
+        case "statistic":
+          console.log("statistic");
           break;
-        case 'team':
-          console.log('team');
+        case "team":
+          console.log("team");
           break;
         default:
           break;
       }
     }
-  }
+  };
 
   listen(): void {
-    document.querySelector('#header')?.addEventListener('click', this.handleHeaderClick);
+    document
+      .querySelector("#header")
+      ?.addEventListener("click", this.handleHeaderClick);
   }
 }
