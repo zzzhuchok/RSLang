@@ -7,6 +7,7 @@ import {
   User,
   UserWord,
   IWord,
+  IWordUser,
 } from "../Types/Types";
 import { LocalStoreAPI } from "./LocalStoreAPI";
 
@@ -60,6 +61,13 @@ export class LearnWordsAPI {
   };
 
   getUserAPI = async (userId: string): Promise<User | undefined> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: "GET",
@@ -69,15 +77,7 @@ export class LearnWordsAPI {
       },
     });
 
-    // updating the token if the time has expired
     if (!response.ok) {
-      if (response.status === 401) {
-        console.log("uh...");
-        await this.getNewUserTokenAPI(userId);
-        await this.getUserAPI(userId);
-        return;
-      }
-
       throw new HttpError(response.status, response.statusText);
     }
 
@@ -86,6 +86,13 @@ export class LearnWordsAPI {
   };
 
   updateUserAPI = async (data: User, userId: string): Promise<User | void> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: "PUT",
@@ -97,14 +104,7 @@ export class LearnWordsAPI {
       body: JSON.stringify(data),
     });
 
-    // updating the token if the time has expired
     if (!response.ok) {
-      if (response.status === 401) {
-        await this.getNewUserTokenAPI(userId);
-        await this.updateUserAPI(data, userId);
-        return;
-      }
-
       throw new HttpError(response.status, response.statusText);
     }
 
@@ -113,6 +113,13 @@ export class LearnWordsAPI {
   };
 
   deleteUserAPI = async (userId: string): Promise<void> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}`, {
       method: "DELETE",
@@ -121,14 +128,7 @@ export class LearnWordsAPI {
       },
     });
 
-    // updating the token if the time has expired
     if (!response.ok) {
-      if (response.status === 401) {
-        await this.getNewUserTokenAPI(userId);
-        await this.deleteUserAPI(userId);
-        return;
-      }
-
       throw new HttpError(response.status, response.statusText);
     }
   };
@@ -143,14 +143,24 @@ export class LearnWordsAPI {
       },
     });
 
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const userData = (await response.json()) as NewToken;
-    this.localStore.updateUser(userData.token, userData.refreshToken);
     return userData;
   };
 
   /* =============================================================================== */
   /* Users/ Words */
   getAllUserWordsAPI = async (userId: string): Promise<UserWord[]> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words`, {
       method: "GET",
@@ -159,6 +169,11 @@ export class LearnWordsAPI {
         Accept: "application/json",
       },
     });
+
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const userWords = (await response.json()) as UserWord[];
     return userWords;
   };
@@ -168,6 +183,13 @@ export class LearnWordsAPI {
     userId: string,
     wordId: string
   ) => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "POST",
@@ -179,6 +201,10 @@ export class LearnWordsAPI {
       body: JSON.stringify(newWord),
     });
 
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const userWord = (await response.json()) as UserWord;
     return userWord;
   };
@@ -187,6 +213,13 @@ export class LearnWordsAPI {
     userId: string,
     wordId: string
   ): Promise<UserWord | void> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "GET",
@@ -204,6 +237,13 @@ export class LearnWordsAPI {
     userId: string,
     wordId: string
   ): Promise<UserWord> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "PUT",
@@ -214,11 +254,23 @@ export class LearnWordsAPI {
       },
       body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const word = (await response?.json()) as UserWord;
     return word;
   };
 
   deleteUserWordAPI = async (userId: string, wordId: string): Promise<void> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: "DELETE",
@@ -232,16 +284,24 @@ export class LearnWordsAPI {
   /* Users/AggregatedWords */
   getAllUserAggrWords = async (
     userId: string,
-    wordsPerPage: string,
-    filter: string,
+    filter: '{"userWord.difficulty": "hard"}',
+    wordsPerPage?: string,
     group?: string,
     page?: string
   ) => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const groupValue = group ? `group=${group}` : "";
     const pageValue = page ? `&page=${page}` : "";
+    const wordsPerPageValue = wordsPerPage ? `&wordsPerPage=${wordsPerPage}` : "";
     const response = await fetch(
-      `${this.users}/${userId}/aggregatedWords?${groupValue}${pageValue}&wordsPerPage=${wordsPerPage}&filter=${filter}`,
+      `${this.users}/${userId}/aggregatedWords?${groupValue}${pageValue}${wordsPerPageValue}&filter=${filter}`,
       {
         method: "GET",
         headers: {
@@ -250,13 +310,25 @@ export class LearnWordsAPI {
         },
       }
     );
-    const statistic = (await response.json()) as Statistic;
-    return statistic;
+
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
+    const aggrWords = (await response.json()) as IWordUser[];
+    return aggrWords;
   };
 
   /* =============================================================================== */
   /* Users/ Statistic */
   getUserStatisticAPI = async (userId: string): Promise<Statistic> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       method: "GET",
@@ -265,6 +337,11 @@ export class LearnWordsAPI {
         Accept: "application/json",
       },
     });
+
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const statistic = (await response.json()) as Statistic;
     return statistic;
   };
@@ -273,6 +350,13 @@ export class LearnWordsAPI {
     data: Statistic,
     userId: string
   ): Promise<Statistic> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       method: "PUT",
@@ -283,6 +367,11 @@ export class LearnWordsAPI {
       },
       body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      throw new HttpError(response.status, response.statusText);
+    }
+
     const updateStat = (await response.json()) as Statistic;
     return updateStat;
   };
@@ -291,6 +380,13 @@ export class LearnWordsAPI {
 
   /* Users/ Setting */
   getUserSettingsAPI = async (userId: string): Promise<Settings> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/settings`, {
       method: "GET",
@@ -307,6 +403,13 @@ export class LearnWordsAPI {
     data: Settings,
     userId: string
   ): Promise<Settings> => {
+    /* UPDATE TOKEN */
+    if (this.checkTokenLifetime()) {
+      console.log('NEED UPDATE TOKEN');
+      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      this.localStore.updateUser(token, refreshToken, new Date());
+    }
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/settings`, {
       method: "PUT",
@@ -354,4 +457,11 @@ export class LearnWordsAPI {
       ? type
       : "";
   };
+
+  checkTokenLifetime = (): boolean => {
+    const time = this.localStore.getUser().date;
+    const hourPassed = new Date((Date.now() - new Date(time).getTime())).getHours();
+    return hourPassed > 3;
+  }
 }
+

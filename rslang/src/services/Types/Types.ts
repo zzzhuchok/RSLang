@@ -15,6 +15,13 @@ export interface IWord {
   wordTranslate: string;
 }
 
+export interface IWordUser extends IWord {
+  paginatedResults: IWord[];
+  totalCount: {
+    count: number
+  }[];
+}
+
 export interface UserWord {
   difficulty: string;
   optional: IWord;
@@ -53,8 +60,16 @@ export interface NewToken {
 
 export interface UserStore {
   isAuth: boolean;
+  date: Date;
   name: string;
   token: string;
   refreshToken: string;
   userId: string;
+}
+
+export interface controlGameSprint {
+  maxPage: number;
+  maxWordsPage: number;
+  countPage: number;
+  countWord: number;
 }

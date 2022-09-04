@@ -9,6 +9,7 @@ import { store } from "../../services/store";
 import { IWord } from "../../services/Types/Types";
 
 export class TextBook {
+
   onReDraw = (): void => {
     if (Number(localStorage.getItem("group")) !== store.group) {
       store.activePage = 1;
@@ -20,7 +21,10 @@ export class TextBook {
       Number(localStorage.getItem("group")) !== store.group ||
       Number(localStorage.getItem("page")) !== store.activePage
     ) {
-      Loading();
+      const textbookItems = document.querySelector(
+        ".textbook__items"
+      ) as HTMLElement;
+      Loading(textbookItems);
       void getWords().then((data: Array<IWord>) => this.words.drawWords(data));
       localStorage.setItem("page", String(store.activePage));
       localStorage.setItem("group", String(store.group));
@@ -56,7 +60,10 @@ export class TextBook {
         </div>
       </div>
   `;
-    Loading();
+    const textbookItems = document.querySelector(
+      ".textbook__items"
+    ) as HTMLElement;
+    Loading(textbookItems);
     this.gameLinks.drawGameLinks();
 
     this.pagination.drawPagination();

@@ -18,7 +18,7 @@ export class Authentication {
     div.className = 'popup__form-authentication hidden';
     div.setAttribute('id', 'popupFormAuth');
     div.innerHTML = this.getFormHtml();
-    document.body.appendChild(div);
+    (document.querySelector('#header') as HTMLElement).appendChild(div);
   }
 
   getFormHtml = (typeForm: 'registration' | 'login' = 'login'): string => {

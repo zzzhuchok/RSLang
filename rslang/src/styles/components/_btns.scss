@@ -22,7 +22,36 @@
 
   &:hover {
     background: $primery_hover;
-    color: white;
+    color: $white;
+  }
+}
+
+.btn--correct {
+  padding: 10px 30px;
+  border: none;
+  background: $correct;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+}
+
+.btn--incorrect {
+  border: none;
+  background: $difficult_btn;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+
+  &:active {
+    transform: scale(0.93);
   }
 }
 
