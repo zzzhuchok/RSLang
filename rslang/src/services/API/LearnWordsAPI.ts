@@ -151,6 +151,9 @@ export class LearnWordsAPI {
   /* =============================================================================== */
   /* Users/ Words */
   getAllUserWordsAPI = async (userId: string): Promise<UserWord[]> => {
+    /* TEST UPDATE TOKEN */
+    if (this.checkTokenLifetime()) await this.getNewUserTokenAPI(userId).catch(err => console.log(err));
+
     const { token } = this.localStore.getUser();
     const response = await fetch(`${this.users}/${userId}/words`, {
       method: "GET",
@@ -354,4 +357,11 @@ export class LearnWordsAPI {
       ? type
       : "";
   };
+
+  checkTokenLifetime = (): boolean => {
+    const time = this.localStore.getUser().date;
+    const hourPassed = new Date((Date.now() - new Date(time).getTime())).getHours();
+    return hourPassed > 3;
+  }
 }
+

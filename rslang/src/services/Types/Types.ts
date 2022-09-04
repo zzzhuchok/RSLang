@@ -53,6 +53,7 @@ export interface NewToken {
 
 export interface UserStore {
   isAuth: boolean;
+  date: Date;
   name: string;
   token: string;
   refreshToken: string;

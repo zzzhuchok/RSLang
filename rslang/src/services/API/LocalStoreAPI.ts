@@ -17,12 +17,12 @@ export class LocalStoreAPI {
   /* USER METHODS */
   setUser = (userData: Auth): void => {
     const {name, token, refreshToken, userId} = userData;
-    this.setValue('user', {isAuth: true, name, token, refreshToken, userId});
+    this.setValue('user', {isAuth: true, date: new Date(), name, token, refreshToken, userId});
   }
 
   getUser = (): UserStore => {
     const userObj = JSON.parse(localStorage.getItem('user') as string) as UserStore;
-    return (userObj) ? userObj : {isAuth: false, name: '', token: '', refreshToken: '', userId: ''};
+    return (userObj) ? userObj : {isAuth: false, date: new Date(), name: '', token: '', refreshToken: '', userId: ''};
   }
 
   updateUser = (newToken: string, newRefrashToken: string): void => {
@@ -34,7 +34,7 @@ export class LocalStoreAPI {
 
   deleteUser = ():void => {
     let userDataObj = JSON.parse(localStorage.getItem('user') as string) as UserStore;
-    userDataObj = {isAuth: false, name: '', token: '', refreshToken: '', userId: ''};
+    userDataObj = {isAuth: false, date: new Date(), name: '', token: '', refreshToken: '', userId: ''};
     this.setValue('user', userDataObj);
   }
 
