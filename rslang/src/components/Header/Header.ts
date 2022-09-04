@@ -30,11 +30,11 @@ export class Header {
 
     return `
       <div class="header__container">
-        <a class="header__logo" href="#!">
+        <a class="header__logo" href="/#/">
           <img src="./logo.svg" alt="logo" id="mainPage">
         </a>
         <nav class="header__nav" id="nav">
-          <a class="header__nav-link" href="#!" id="textBook">Учебник</a>
+          <a class="header__nav-link" href="/#/books/" id="textBook">Учебник</a>
           <a class="header__nav-link" href="#!" id="miniGames">Мини-игры</a>
           <a class="header__nav-link" href="#!" id="statistic">Статистика</a>
           <a class="header__nav-link" href="#!" id="team">О команде</a>
@@ -53,7 +53,6 @@ export class Header {
 
   /* HANDLERS */
   handleHeaderClick = (evt: Event): void => {
-    evt.preventDefault();
     const elem = evt.target as HTMLButtonElement;
 
     if (elem.closest("#blockHeaderkAuth")) {
@@ -71,33 +70,6 @@ export class Header {
 
       if (elem.closest("#logout")?.id === "logout") {
         this.authentication.logoutUser();
-      }
-    }
-
-    if (elem.closest("#nav") || elem.closest("#mainPage")) {
-      switch (elem.id) {
-        case "mainPage":
-          console.log("mainPage");
-          break;
-        case "textBook":
-          this.textbook.drawTextBookComponents();
-          break;
-        case 'miniGames':
-          import('./../../pages/Games/Games')
-            .then(page => {
-              const sprintGame = new page.Games();
-              sprintGame.init();
-            })
-            .catch(err => console.log(err));
-          break;
-        case "statistic":
-          console.log("statistic");
-          break;
-        case "team":
-          console.log("team");
-          break;
-        default:
-          break;
       }
     }
   };
