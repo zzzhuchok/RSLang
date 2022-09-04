@@ -1,13 +1,13 @@
-import { Loading } from '../../components/Loading/Loading';
+// import { Loading } from '../../components/Loading/Loading';
 import { LearnWordsAPI } from '../../services/API/LearnWordsAPI';
-import { controlGameSprint, Word } from '../../services/Types/Types';
+import { controlGameSprint, IWord } from '../../services/Types/Types';
 
 export class SprintGame {
 
-  arrWords: Word[][];
+  arrWords: IWord[][];
   currentWordTranslateDisplay: string;
-  arrCorrectAnswers: Word[];
-  arrIncorrectAnswers: Word[];
+  arrCorrectAnswers: IWord[];
+  arrIncorrectAnswers: IWord[];
   timerFinish: number;
   timerClock: number;
   control: controlGameSprint;
@@ -38,9 +38,9 @@ export class SprintGame {
   }
 
   async init() {
-    const main = document.querySelector('main') as HTMLElement;
+    // const main = document.querySelector('main') as HTMLElement;
 
-    Loading(main);
+    // Loading(main);
 
     this.arrWords = (this.initialValue.state === 'games') ?
       await this.getWordsFromCommonBase(this.initialValue.level) :
@@ -169,7 +169,7 @@ export class SprintGame {
     `
   }
 
-  private async getWordsFromCommonBase(level: number): Promise<Word[][]> {
+  private async getWordsFromCommonBase(level: number): Promise<IWord[][]> {
     const arrRandomPage = this.getRandomPages();
     const arrWordsForGame = await Promise.all(arrRandomPage.map(async (pageRandom) => await this.learnWords.getWordsAPI(level, pageRandom)));
     return arrWordsForGame;
@@ -185,7 +185,7 @@ export class SprintGame {
     return arrWordsForGame;
   }
 
-  private getRandomTranslate(): Word {
+  private getRandomTranslate(): IWord {
     const {countPage, countWord} = this.control;
     const {wordTranslate: translateTrue} = this.arrWords[countPage][countWord];
 
@@ -201,7 +201,7 @@ export class SprintGame {
     return Array(page).fill(1).map(el => el * Math.floor(Math.random() * 30));
   }
 
-  private getRandomWord(): Word {
+  private getRandomWord(): IWord {
     return this.arrWords[this.control.countPage][Math.floor(Math.random() * this.arrWords[this.control.countPage].length)];
   }
 
@@ -293,7 +293,7 @@ export class SprintGame {
     return true;
   }
 
-  private checkAnswer(answer: boolean, word: Word) {
+  private checkAnswer(answer: boolean, word: IWord) {
     if (answer) {
       this.arrCorrectAnswers.push(word);
       this.applyCorrectAnswerStyle();
