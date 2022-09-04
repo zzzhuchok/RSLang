@@ -15,6 +15,13 @@ export interface IWord {
   wordTranslate: string;
 }
 
+export interface IWordUser extends IWord {
+  paginatedResults: IWord[];
+  totalCount: {
+    count: number
+  }[];
+}
+
 export interface UserWord {
   difficulty: string;
   optional: IWord;
