@@ -63,8 +63,8 @@ export class LearnWordsAPI {
   getUserAPI = async (userId: string): Promise<User | undefined> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -88,8 +88,8 @@ export class LearnWordsAPI {
   updateUserAPI = async (data: User, userId: string): Promise<User | void> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -115,8 +115,8 @@ export class LearnWordsAPI {
   deleteUserAPI = async (userId: string): Promise<void> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -156,8 +156,8 @@ export class LearnWordsAPI {
   getAllUserWordsAPI = async (userId: string): Promise<UserWord[]> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -185,8 +185,8 @@ export class LearnWordsAPI {
   ) => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -215,8 +215,8 @@ export class LearnWordsAPI {
   ): Promise<UserWord | void> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -239,8 +239,8 @@ export class LearnWordsAPI {
   ): Promise<UserWord> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -266,8 +266,8 @@ export class LearnWordsAPI {
   deleteUserWordAPI = async (userId: string, wordId: string): Promise<void> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -291,15 +291,17 @@ export class LearnWordsAPI {
   ) => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
     const { token } = this.localStore.getUser();
     const groupValue = group ? `group=${group}` : "";
     const pageValue = page ? `&page=${page}` : "";
-    const wordsPerPageValue = wordsPerPage ? `&wordsPerPage=${wordsPerPage}` : "";
+    const wordsPerPageValue = wordsPerPage
+      ? `&wordsPerPage=${wordsPerPage}`
+      : "";
     const response = await fetch(
       `${this.users}/${userId}/aggregatedWords?${groupValue}${pageValue}${wordsPerPageValue}&filter=${filter}`,
       {
@@ -324,8 +326,8 @@ export class LearnWordsAPI {
   getUserStatisticAPI = async (userId: string): Promise<Statistic> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -352,8 +354,8 @@ export class LearnWordsAPI {
   ): Promise<Statistic> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -382,8 +384,8 @@ export class LearnWordsAPI {
   getUserSettingsAPI = async (userId: string): Promise<Settings> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -405,8 +407,8 @@ export class LearnWordsAPI {
   ): Promise<Settings> => {
     /* UPDATE TOKEN */
     if (this.checkTokenLifetime()) {
-      console.log('NEED UPDATE TOKEN');
-      const {token, refreshToken} = await this.getNewUserTokenAPI(userId);
+      console.log("NEED UPDATE TOKEN");
+      const { token, refreshToken } = await this.getNewUserTokenAPI(userId);
       this.localStore.updateUser(token, refreshToken, new Date());
     }
 
@@ -460,8 +462,9 @@ export class LearnWordsAPI {
 
   checkTokenLifetime = (): boolean => {
     const time = this.localStore.getUser().date;
-    const hourPassed = new Date((Date.now() - new Date(time).getTime())).getHours();
+    const hourPassed = new Date(
+      Date.now() - new Date(time).getTime()
+    ).getHours();
     return hourPassed > 3;
-  }
+  };
 }
-
