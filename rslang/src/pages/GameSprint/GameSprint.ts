@@ -1,4 +1,4 @@
-// import { Loading } from '../../components/Loading/Loading';
+import { Loading } from '../../components/Loading/Loading';
 import { LearnWordsAPI } from '../../services/API/LearnWordsAPI';
 import { controlGameSprint, IWord } from '../../services/Types/Types';
 
@@ -38,9 +38,9 @@ export class SprintGame {
   }
 
   async init() {
-    // const main = document.querySelector('main') as HTMLElement;
+    const main = document.querySelector('main') as HTMLElement;
 
-    // Loading(main);
+    Loading(main);
 
     this.arrWords = (this.initialValue.state === 'games') ?
       await this.getWordsFromCommonBase(this.initialValue.level) :
