@@ -11,7 +11,7 @@ import { store } from "../../services/store";
 import { IWord } from "../../services/Types/Types";
 
 export class TextBook {
-localStoreAPI = new LocalStoreAPI();
+  localStoreAPI = new LocalStoreAPI();
   learnWordsAPI = new LearnWordsAPI();
   onReDraw = (): void => {
     const { userId } = this.localStoreAPI.getUser();
@@ -29,7 +29,7 @@ localStoreAPI = new LocalStoreAPI();
         ".textbook__items"
       ) as HTMLElement;
       Loading(textbookItems);
-            void getWords().then((data: Array<IWord>) => {
+      void getWords().then((data: Array<IWord>) => {
         if (this.localStoreAPI.checkAuthUser()) {
           void this.learnWordsAPI
             .getAllUserWordsAPI(userId)
