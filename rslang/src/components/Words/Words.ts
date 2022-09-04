@@ -248,15 +248,29 @@ export class Words {
     ) as HTMLElement;
     const hardWordsOnPage = document.querySelectorAll(".hard");
     const learnWordsOnPage = document.querySelectorAll(".learn");
+    const audioLink = document.querySelector(
+      ".gamelinks-block__audiogame-block"
+    ) as HTMLLinkElement;
+    const sprintLink = document.querySelector(
+      ".gamelinks-block__sprintgame-block"
+    ) as HTMLLinkElement;
 
     if (hardWordsOnPage.length === 20) {
       wordsBlock.classList.remove("learns");
       wordsBlock.classList.add("hards");
     } else if (learnWordsOnPage.length === 20) {
-      wordsBlock.classList.remove("jards");
+      sprintLink.classList.add("disable");
+      audioLink.classList.add("disable");
+      sprintLink.disabled = true;
+      audioLink.disabled = true;
+      wordsBlock.classList.remove("hards");
       wordsBlock.classList.add("learns");
     } else {
       wordsBlock.classList.remove("learns", "hards");
+      sprintLink.classList.remove("disable");
+      audioLink.classList.remove("disable");
+      sprintLink.disabled = true;
+      audioLink.disabled = true;
     }
   }
 }
