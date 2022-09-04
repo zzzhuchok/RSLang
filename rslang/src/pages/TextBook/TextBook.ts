@@ -11,7 +11,7 @@ import { store } from "../../services/store";
 import { IWord } from "../../services/Types/Types";
 
 export class TextBook {
-  localStoreAPI = new LocalStoreAPI();
+localStoreAPI = new LocalStoreAPI();
   learnWordsAPI = new LearnWordsAPI();
   onReDraw = (): void => {
     const { userId } = this.localStoreAPI.getUser();
@@ -25,8 +25,11 @@ export class TextBook {
       Number(localStorage.getItem("group")) !== store.group ||
       Number(localStorage.getItem("page")) !== store.activePage
     ) {
-      Loading();
-      void getWords().then((data: Array<IWord>) => {
+      const textbookItems = document.querySelector(
+        ".textbook__items"
+      ) as HTMLElement;
+      Loading(textbookItems);
+            void getWords().then((data: Array<IWord>) => {
         if (this.localStoreAPI.checkAuthUser()) {
           void this.learnWordsAPI
             .getAllUserWordsAPI(userId)
@@ -71,7 +74,10 @@ export class TextBook {
         </div>
       </div>
   `;
-    Loading();
+    const textbookItems = document.querySelector(
+      ".textbook__items"
+    ) as HTMLElement;
+    Loading(textbookItems);
     this.gameLinks.drawGameLinks();
 
     this.pagination.drawPagination();

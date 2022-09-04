@@ -4,10 +4,11 @@
     "module": "commonjs",
     "rootDir": "./",
     "rootDirs": [],
-    "esModuleInterop": true,                            
-    "forceConsistentCasingInFileNames": true,           
-    "strict": true,                                    
-    "noImplicitAny": true,                           
-    "skipLibCheck": true                        
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true
   }
 }
