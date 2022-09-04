@@ -35,7 +35,7 @@ export class Header {
         </a>
         <nav class="header__nav" id="nav">
           <a class="header__nav-link" href="/#/books/" id="textBook">Учебник</a>
-          <a class="header__nav-link" href="#!" id="miniGames">Мини-игры</a>
+          <a class="header__nav-link" href="#/games/" id="miniGames">Мини-игры</a>
           <a class="header__nav-link" href="#!" id="statistic">Статистика</a>
           <a class="header__nav-link" href="#!" id="team">О команде</a>
         </nav>
