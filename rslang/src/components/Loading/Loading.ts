@@ -1,8 +1,5 @@
-export const Loading = () => {
-  const textbookItems = document.querySelector(
-    ".textbook__items"
-  ) as HTMLElement;
-  textbookItems.innerHTML = `
+export const Loading = (elem: HTMLElement) => {
+  elem.innerHTML = `
     <div class="loader"></div>
     `;
 };
