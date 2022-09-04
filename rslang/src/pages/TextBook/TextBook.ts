@@ -3,13 +3,18 @@ import { GameLinks } from "../../components/GameLinks/GameLinks";
 import { Loading } from "../../components/Loading/Loading";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { Words } from "../../components/Words/Words";
+import { LearnWordsAPI } from "../../services/API/LearnWordsAPI";
+import { LocalStoreAPI } from "../../services/API/LocalStoreAPI";
 import { getWords } from "../../services/getWords";
 
 import { store } from "../../services/store";
 import { IWord } from "../../services/Types/Types";
 
 export class TextBook {
+  localStoreAPI = new LocalStoreAPI();
+  learnWordsAPI = new LearnWordsAPI();
   onReDraw = (): void => {
+    const { userId } = this.localStoreAPI.getUser();
     if (Number(localStorage.getItem("group")) !== store.group) {
       store.activePage = 1;
       this.pagination.drawPagination();
@@ -21,7 +26,17 @@ export class TextBook {
       Number(localStorage.getItem("page")) !== store.activePage
     ) {
       Loading();
-      void getWords().then((data: Array<IWord>) => this.words.drawWords(data));
+      void getWords().then((data: Array<IWord>) => {
+        if (this.localStoreAPI.checkAuthUser()) {
+          void this.learnWordsAPI
+            .getAllUserWordsAPI(userId)
+            .then((userdata) => {
+              this.words.drawWords(data, userdata);
+            });
+        } else {
+          this.words.drawWords(data);
+        }
+      });
       localStorage.setItem("page", String(store.activePage));
       localStorage.setItem("group", String(store.group));
     }
@@ -38,7 +53,7 @@ export class TextBook {
   gameLinks = new GameLinks();
   englishLevel = new EnglishLevel(this.onReDraw);
   pagination = new Pagination(this.onReDraw);
-  words = new Words(this.onReDraw);
+  words = new Words();
 
   drawTextBookComponents(): void {
     const mainEl = document.querySelector("main") as HTMLElement;
@@ -70,7 +85,14 @@ export class TextBook {
         const paginations = document.querySelectorAll(".pagination-content");
         paginations.forEach((pagination) => pagination.classList.add("hidden"));
       }
-      this.words.drawWords(data);
+      if (this.localStoreAPI.checkAuthUser()) {
+        const { userId } = this.localStoreAPI.getUser();
+        void this.learnWordsAPI.getAllUserWordsAPI(userId).then((userdata) => {
+          this.words.drawWords(data, userdata);
+        });
+      } else {
+        this.words.drawWords(data);
+      }
     });
   }
 }

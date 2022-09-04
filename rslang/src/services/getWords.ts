@@ -7,7 +7,7 @@ export const getWords = async (): Promise<Array<IWord>> => {
   const learnword = new LearnWordsAPI();
   const localStoreApi = new LocalStoreAPI();
 
-  if (store.group > 5) {
+  if (store.group === 6) {
     const { userId } = localStoreApi.getUser();
 
     return learnword.getAllUserWordsAPI(userId).then((data) => {

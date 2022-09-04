@@ -340,18 +340,4 @@ export class LearnWordsAPI {
     const dataAuth = (await response.json()) as Auth;
     return dataAuth;
   };
-
-  isWordUser = async (
-    type: string,
-    userId: string,
-    wordId: string
-  ): Promise<string> => {
-    const data = await this.getAllUserWordsAPI(userId);
-
-    return data.filter((element) => {
-      return element.optional.id === wordId && element.difficulty === type;
-    }).length > 0
-      ? type
-      : "";
-  };
 }
