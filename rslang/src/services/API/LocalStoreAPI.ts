@@ -25,10 +25,11 @@ export class LocalStoreAPI {
     return (userObj) ? userObj : {isAuth: false, date: new Date(), name: '', token: '', refreshToken: '', userId: ''};
   }
 
-  updateUser = (newToken: string, newRefrashToken: string): void => {
+  updateUser = (newToken: string, newRefrashToken: string, date: Date): void => {
     const userObj = JSON.parse(localStorage.getItem('user') as string) as UserStore;
     userObj.token = newToken;
     userObj.refreshToken = newRefrashToken;
+    userObj.date = date;
     this.setValue('user', userObj);
   }
 
