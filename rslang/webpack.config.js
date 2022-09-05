@@ -19,6 +19,10 @@ const esLintPlugin = (isDev) => isDev ? [] : [new ESLintPlugin({ extensions: ['t
 
 module.exports = ({ development }) => ({
   mode: development ? 'development' : 'production',
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  },
   devtool: development ? 'inline-source-map' : false,
   entry: {
     main: './src/index.ts',

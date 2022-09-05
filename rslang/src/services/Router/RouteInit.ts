@@ -8,11 +8,15 @@ import { Games } from "../../pages/Games/Games";
 import { LocalStoreAPI } from "../API/LocalStoreAPI";
 import { SprintGame } from "../../pages/GameSprint/GameSprint";
 import { GameAudioCall } from "../../pages/GameAudioCall/GameAudioCall";
+import { AboutPage } from "../../pages/AboutPage/AboutPage";
+import { StatPage } from "../../pages/StatPage/StatPage";
 
 const app = new App();
 const books = new TextBook();
 const games = new Games();
 const localStore = new LocalStoreAPI();
+const about = new AboutPage();
+const stat = new StatPage();
 
 const router = new Router({
     mode: 'hash',
@@ -35,6 +39,13 @@ export function RouteStatus () {
     })
     .add(/books/, () => {
       books.drawTextBookComponents();
+    })
+    .add(/about/, () => {
+      about.drawPage();
+    })
+    .add(/stat/, () => {
+      stat.drawPage();
+      stat.init();
     })
     .add(/games\/sprint\/level-(.*)/, () => {
       const arrPath = window.location.hash.split('/');
