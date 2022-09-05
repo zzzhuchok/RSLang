@@ -4,6 +4,8 @@ enum RouteConstants {
 
     BOOKS_PATH = 'books',
     GAMES_PATH = 'games',
+    ABOUT_PATH = 'about',
+    STAT_PATH = 'stat',
     EMPTY_FILLER = '',
   }
 

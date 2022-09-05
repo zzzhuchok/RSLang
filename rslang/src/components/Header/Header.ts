@@ -36,8 +36,8 @@ export class Header {
         <nav class="header__nav" id="nav">
           <a class="header__nav-link" href="/#/books/" id="textBook">Учебник</a>
           <a class="header__nav-link" href="#/games/" id="miniGames">Мини-игры</a>
-          <a class="header__nav-link" href="#!" id="statistic">Статистика</a>
-          <a class="header__nav-link" href="#!" id="team">О команде</a>
+          <a class="header__nav-link" href="#/stat/" id="statistic">Статистика</a>
+          <a class="header__nav-link" href="#/about/" id="team">О команде</a>
         </nav>
         <div class="header__auth" id="blockHeaderkAuth">
           <div class="header__user-name ${userStateAuth}" id="userProfile">${userName}</div>
