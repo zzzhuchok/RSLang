@@ -1,6 +1,6 @@
 enum RouteConstants {
-    ROOT = '/',
-    HASH = 'hash',
+  ROOT = '/',
+  HASH = 'hash',
 
     BOOKS_PATH = 'books',
     GAMES_PATH = 'games',
@@ -9,4 +9,4 @@ enum RouteConstants {
     EMPTY_FILLER = '',
   }
 
-  export default RouteConstants;
+export default RouteConstants;

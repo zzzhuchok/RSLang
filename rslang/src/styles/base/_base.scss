@@ -34,9 +34,7 @@ body {
 
 .main {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   flex: 1 1 auto;
   padding: 40px 0;
 }
@@ -45,6 +43,10 @@ body {
   max-width: 1590px;
   margin: 0 auto;
   padding: 0 30px;
+
+  @media screen and (max-width: $point_3) {
+    padding: 0 10px;
+  }
 }
 
 *.hidden {

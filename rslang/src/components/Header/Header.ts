@@ -47,6 +47,9 @@ export class Header {
             <img src="./icons/logout.svg" alt="">
           </button>
         </div>
+        <button class="burger" type="button" id="burger">
+          <span>burger</span>
+        </button>
       </div>
     `;
   };
@@ -70,6 +73,7 @@ export class Header {
 
       if (elem.closest("#logout")?.id === "logout") {
         this.authentication.logoutUser();
+        window.location.reload();
       }
     }
   };
