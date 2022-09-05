@@ -64,10 +64,16 @@ export class Games {
   handleBtnLevelsClick = (evt: Event) => {
     evt.preventDefault();
     const elem = evt.target as HTMLElement;
+    const level = Number(elem.dataset.pageWords);
 
-    if (elem.hasAttribute('data-page-words')) {
-
-      const level = Number(elem.dataset.pageWords);
+    if (elem.hasAttribute('data-page-words') && elem.closest('.audiocall')) {
+      import('../GameAudioCall/GameAudioCall')
+      .then(component => {
+        const sprintGame = new component.GameAudioCall({state: 'games', level});
+        sprintGame.init().catch(err => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  } else if(elem.hasAttribute('data-page-words') && elem.closest('.sprint')) {
       import('../GameSprint/GameSprint')
         .then(component => {
           const sprintGame = new component.SprintGame({state: 'games', level});
