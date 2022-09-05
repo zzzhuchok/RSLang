@@ -55,6 +55,14 @@ export class GameAudioCall {
             this.initialValue.page
           );
 
+    console.log(this.arrWords);
+
+    if (!this.arrWords[0].length) {
+      alert("На данной странице все слова изучены");
+      window.history.back();
+      return;
+    }
+
     this.control.maxPage = this.arrWords.length;
     this.control.maxWordsPage = this.arrWords[0].length;
 
@@ -121,7 +129,7 @@ export class GameAudioCall {
             <div class="popup-sprint__bottom">
               <div class="popup-sprint__btns">
                 <button class="popup-sprint__btn-relay btn btn--primery" id="sprintStartAgain">Начать заново</button>
-                <button class="popup-sprint__btn-exit btn" id="backToGames">К списку игр</button>
+                <button class="popup-sprint__btn-exit btn" id="backToGames">Вернуться назад</button>
               </div>
             </div>
           </div>
@@ -185,11 +193,11 @@ export class GameAudioCall {
     const { wordTranslate } = this.arrWords[countPage][countWord];
     for (let i = 0; i < 4; i++) {
       if (i === randomNumber) {
-        result += `<button class="card-word__btn btn" type="button" data-check-translate="${wordTranslate}" id="btnTrueAnswer">${wordTranslate}</button>`;
+        result += `<button class="card-word__btn btn" type="button" data-check-translate="${wordTranslate}" id="btnAnwer-${i}">${wordTranslate}</button>`;
       } else {
         result += `<button class="card-word__btn btn" type="button" data-check-translate="${
           this.getRandomTranslate().wordTranslate
-        }" id="btnFalseAnswer">${
+        }" id="btnAnwer-${i}">${
           this.getRandomTranslate().wordTranslate
         }</button>`;
       }
@@ -296,7 +304,7 @@ export class GameAudioCall {
   private finishGame(): void {
     window.clearTimeout(this.timerFinish);
     window.clearInterval(this.timerClock);
-    //document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
+    document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
     document.querySelector(".game-sprint__wrapper")?.classList.add("hidden");
 
     const popup = document.querySelector(".game-sprint__popup") as HTMLElement;
@@ -394,7 +402,6 @@ export class GameAudioCall {
       const wordTranslate =
         this.arrWords[this.control.countPage][this.control.countWord];
       const answer = elem.dataset.checkTranslate as string;
-      console.log(elem.dataset.checkTranslate);
       this.checkAnswer(answer, wordTranslate);
       if (!this.checkAvalibilityPage()) {
         this.finishGame();
@@ -409,30 +416,25 @@ export class GameAudioCall {
 
     if (elem.closest("#backToGames") || elem.closest("#btnCloseSprint")) {
       this.closeGame();
-      //document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
+      document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
       import("../Games/Games")
         .then((component) => new component.Games().init())
         .catch((err) => console.log(err));
     }
   };
 
-  /*handlePageGameSprintKeydown = (evt: KeyboardEvent) => {
+  handlePageGameSprintKeydown = (evt: KeyboardEvent) => {
     evt.preventDefault();
+    const buttons = document.querySelectorAll(".card-word__btn");
 
-    const word = this.arrWords[this.control.countPage][this.control.countWord];
-    const btnTrueAnswer = document.querySelector(
-      "#btnTrueAnswer"
-    ) as HTMLButtonElement;
-    const btnFalseAnswer = document.querySelector(
-      "#btnFalseAnswer"
-    ) as HTMLButtonElement;
-
-    if (evt.code === "ArrowLeft") {
-      btnFalseAnswer.style.transform = "scale(0.93)";
-      const answer =
-        btnFalseAnswer.dataset.checkTranslate ===
-        this.currentWordTranslateDisplay;
-      this.checkAnswer(answer, word);
+    console.log(evt.code);
+    if (evt.code === "Digit1") {
+      (buttons[0] as HTMLButtonElement).style.transform = "scale(0.93)";
+      const wordTranslate =
+        this.arrWords[this.control.countPage][this.control.countWord];
+      const answer = (buttons[0] as HTMLButtonElement).dataset
+        .checkTranslate as string;
+      this.checkAnswer(answer, wordTranslate);
       if (!this.checkAvalibilityPage()) {
         this.finishGame();
         return;
@@ -440,24 +442,51 @@ export class GameAudioCall {
       window.setTimeout(() => this.drawCardWord(), 150);
     }
 
-    if (evt.code === "ArrowRight") {
-      btnTrueAnswer.style.transform = "scale(0.93)";
-      const answer =
-        btnTrueAnswer.dataset.checkTranslate ===
-        this.currentWordTranslateDisplay;
-      this.checkAnswer(answer, word);
+    if (evt.code === "Digit2") {
+      (buttons[1] as HTMLButtonElement).style.transform = "scale(0.93)";
+      const wordTranslate =
+        this.arrWords[this.control.countPage][this.control.countWord];
+      const answer = (buttons[1] as HTMLButtonElement).dataset
+        .checkTranslate as string;
+      this.checkAnswer(answer, wordTranslate);
       if (!this.checkAvalibilityPage()) {
         this.finishGame();
         return;
       }
       window.setTimeout(() => this.drawCardWord(), 150);
     }
-  };*/
+    if (evt.code === "Digit3") {
+      (buttons[2] as HTMLButtonElement).style.transform = "scale(0.93)";
+      const wordTranslate =
+        this.arrWords[this.control.countPage][this.control.countWord];
+      const answer = (buttons[2] as HTMLButtonElement).dataset
+        .checkTranslate as string;
+      this.checkAnswer(answer, wordTranslate);
+      if (!this.checkAvalibilityPage()) {
+        this.finishGame();
+        return;
+      }
+      window.setTimeout(() => this.drawCardWord(), 150);
+    }
+    if (evt.code === "Digit4") {
+      (buttons[3] as HTMLButtonElement).style.transform = "scale(0.93)";
+      const wordTranslate =
+        this.arrWords[this.control.countPage][this.control.countWord];
+      const answer = (buttons[3] as HTMLButtonElement).dataset
+        .checkTranslate as string;
+      this.checkAnswer(answer, wordTranslate);
+      if (!this.checkAvalibilityPage()) {
+        this.finishGame();
+        return;
+      }
+      window.setTimeout(() => this.drawCardWord(), 150);
+    }
+  };
 
   listen() {
     document
       .querySelector("#gameSprint")
       ?.addEventListener("click", this.handlePageGameSprintClick);
-    //document.addEventListener("keydown", this.handlePageGameSprintKeydown);
+    document.addEventListener("keydown", this.handlePageGameSprintKeydown);
   }
 }
