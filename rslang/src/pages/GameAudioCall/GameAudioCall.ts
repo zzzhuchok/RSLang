@@ -55,8 +55,6 @@ export class GameAudioCall {
             this.initialValue.page
           );
 
-    console.log(this.arrWords);
-
     if (!this.arrWords[0].length) {
       alert("На данной странице все слова изучены");
       window.history.back();
@@ -177,9 +175,15 @@ export class GameAudioCall {
   private getHTMLCard() {
     const { countPage, countWord } = this.control;
     const { audio } = this.arrWords[countPage][countWord];
-
     return `
+    <div class="audioBlock">
       <audio src="${this.learnWords.url}/${audio}" autoplay></audio>
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.94727 11.2993C4.8427 11.2993 3.94727 12.1948 3.94727 13.2993V16.7007C3.94727 17.8052 4.8427 18.7007 5.94727 18.7007H8.88148L15.0492 24.8684V5.13158L8.88148 11.2993H5.94727Z" fill="#3636DB"/>
+        <path d="M17 23C21.4183 23 25 19.4183 25 15C25 10.5817 21.4183 7 17 7V8.99766C20.315 8.99766 23.0023 11.685 23.0023 15C23.0023 18.315 20.315 21.0023 17 21.0023V23Z" fill="#3636DB"/>
+        <path d="M17 18.998C19.0823 18.932 20.75 17.2233 20.75 15.125C20.75 13.0267 19.0823 11.318 17 11.252V18.998Z" fill="#3636DB"/>
+      </svg>
+    </div>
       <div class="card-word__word-ru">${this.currentWordTranslateDisplay}</div>
       <div class="card-word__block-btn">
         ${this.getAnswers(countPage, countWord)}
@@ -193,11 +197,16 @@ export class GameAudioCall {
     const { wordTranslate } = this.arrWords[countPage][countWord];
     for (let i = 0; i < 4; i++) {
       if (i === randomNumber) {
-        result += `<button class="card-word__btn btn" type="button" data-check-translate="${wordTranslate}" id="btnAnwer-${i}">${wordTranslate}</button>`;
+        result += `<button class="card-word__btn btn" type="button" data-check-translate="${wordTranslate}" id="btnAnwer-${i}">
+        <span>${i + 1}. </span>
+        ${wordTranslate}
+        </button>`;
       } else {
         result += `<button class="card-word__btn btn" type="button" data-check-translate="${
           this.getRandomTranslate().wordTranslate
-        }" id="btnAnwer-${i}">${
+        }" id="btnAnwer-${i}"
+        >
+        <span>${i + 1}. </span>${
           this.getRandomTranslate().wordTranslate
         }</button>`;
       }
@@ -218,11 +227,24 @@ export class GameAudioCall {
 
   private async getWordsFromTextbook(level: number, page: number | undefined) {
     const arrWordsForGame = [];
-    let cntPage = page ? page : -1;
+    let cntPage = page as number;
+
+    if (level === 6) {
+      const hardWords = await this.learnWords.getUserAggrHardWords();
+      arrWordsForGame[0] = hardWords;
+      return arrWordsForGame;
+    }
+
+    const arrAggrNoLearnedWords = [];
     while (cntPage >= 0) {
-      arrWordsForGame.push(await this.learnWords.getWordsAPI(level, cntPage));
+      const noLearnedWordsOnPage =
+        await this.learnWords.getUserAggrNoLearnedWords(level, cntPage);
+      arrAggrNoLearnedWords.push(noLearnedWordsOnPage);
       cntPage -= 1;
     }
+
+    arrWordsForGame[0] = arrAggrNoLearnedWords.flat();
+
     return arrWordsForGame;
   }
 
@@ -302,16 +324,22 @@ export class GameAudioCall {
   }
 
   private finishGame(): void {
-    window.clearTimeout(this.timerFinish);
-    window.clearInterval(this.timerClock);
-    document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
-    document.querySelector(".game-sprint__wrapper")?.classList.add("hidden");
+    try {
+      window.clearTimeout(this.timerFinish);
+      window.clearInterval(this.timerClock);
+      document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
+      document.querySelector(".game-sprint__wrapper")?.classList.add("hidden");
 
-    const popup = document.querySelector(".game-sprint__popup") as HTMLElement;
-    popup.classList.remove("hidden");
+      const popup = document.querySelector(
+        ".game-sprint__popup"
+      ) as HTMLElement;
+      popup.classList.remove("hidden");
 
-    this.drawAnswersInPopup();
-    console.log("finish GAME");
+      this.drawAnswersInPopup();
+      console.log("finish GAME");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private closeGame(): void {
@@ -330,7 +358,7 @@ export class GameAudioCall {
       this.control.countPage += 1;
 
       if (this.control.countPage === maxPage) {
-        console.log("слова закончились");
+        console.log("the words ended");
         return false;
       }
     }
@@ -417,9 +445,7 @@ export class GameAudioCall {
     if (elem.closest("#backToGames") || elem.closest("#btnCloseSprint")) {
       this.closeGame();
       document.removeEventListener("keydown", this.handlePageGameSprintKeydown);
-      import("../Games/Games")
-        .then((component) => new component.Games().init())
-        .catch((err) => console.log(err));
+      window.history.back();
     }
   };
 
@@ -427,7 +453,6 @@ export class GameAudioCall {
     evt.preventDefault();
     const buttons = document.querySelectorAll(".card-word__btn");
 
-    console.log(evt.code);
     if (evt.code === "Digit1") {
       (buttons[0] as HTMLButtonElement).style.transform = "scale(0.93)";
       const wordTranslate =
@@ -488,5 +513,9 @@ export class GameAudioCall {
       .querySelector("#gameSprint")
       ?.addEventListener("click", this.handlePageGameSprintClick);
     document.addEventListener("keydown", this.handlePageGameSprintKeydown);
+    document.querySelector(".audioBlock")?.addEventListener("click", () => {
+      const audio = document.querySelector("audio");
+      void audio?.play();
+    });
   }
 }
