@@ -50,7 +50,9 @@ export class Authentication {
         <p class="form__text">
           ${prevLinkText} <a class="form__link form__link--bold" href="./" id="${linkId}">${linkText}</a>
         </p>
-        <div class="form__btn-closed"></div>
+        <div class="form__btn-closed">
+          <img src="./icons/close.svg" alt="closed">
+        </div>
       </form>
     `;
   }
@@ -161,7 +163,7 @@ export class Authentication {
     const form = elem.closest('.form') as HTMLElement;
     const name = (document.querySelector('[data-type-input="name"]') as HTMLInputElement);
 
-    if (elem.classList.contains('form__btn-closed')) {
+    if (elem.closest('.form__btn-closed')) {
       document.querySelector('.popup__form-authentication')?.classList.add('hidden');
     }
 
