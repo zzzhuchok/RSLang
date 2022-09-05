@@ -15,7 +15,7 @@ export class MainPage {
           <div class="left-main__text">
             Нескучное онлайн-обучение английскому языку с помощью игр и интересных заданий в любое удобное для вас время
           </div>
-          <button class="left-main__button btn btn--primery">Начать обучение</button>
+          <a class="left-main__button btn btn--primery btn--big" href="/#/books/">Начать обучение</a>
         </div>
         <div class="left-main__bottom">
           <div class="left-main__achievements-block">
@@ -31,7 +31,7 @@ export class MainPage {
         </div>
       </div>
       <div class="main__item right-main">
-        <img class="right-main__img-block" src="./main-img.svg">
+        <img class="right-main__img-block" src="./main_bg.png">
       </div>
       </div>
   `

@@ -284,7 +284,7 @@ export class LearnWordsAPI {
   /* Users/AggregatedWords */
   getAllUserAggrWords = async (
     userId: string,
-    filter: '{"userWord.difficulty": "hard"}',
+    filter: string,
     wordsPerPage?: string,
     group?: string,
     page?: string
@@ -320,6 +320,24 @@ export class LearnWordsAPI {
     const aggrWords = (await response.json()) as IWordUser[];
     return aggrWords;
   };
+
+  getUserAggrHardWords = async () => {
+    const {userId} =this.localStore.getUser();
+    const hardWords = await this.getAllUserAggrWords(userId, '{"userWord.difficulty": "hard"}', '3600');
+    return hardWords[0].paginatedResults;
+  }
+
+  getUserAggrNoLearnedWords = async (level: number, page: number) => {
+    const {userId} =this.localStore.getUser();
+    const hardWords = await this.getAllUserAggrWords(
+      userId, `
+      {"$or":[
+        {"$and":[{"group": ${level}, "page": ${page}, "userWord.difficulty": null}]},
+        {"$and":[{"group": ${level}, "page": ${page}, "userWord.difficulty": "hard"}]}
+      ]}
+      `, '3600');
+    return hardWords[0].paginatedResults;
+  }
 
   /* =============================================================================== */
   /* Users/ Statistic */

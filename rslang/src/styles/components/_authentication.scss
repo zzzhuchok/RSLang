@@ -99,35 +99,9 @@
   color: $primery_accent
 }
 .form__btn-closed {
-  width: 14px;
-  height: 14px;
   position: absolute;
   top: 25px;
   right: 40px;
   z-index: 5;
   cursor: pointer;
-
-  &::before {
-    content: '';
-    width: 2px;
-    height: 19.799px;
-    background: $text;
-    transform: rotate(45deg);
-    transform-origin: bottom right;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
-  &::after {
-    content: '';
-    width: 2px;
-    height: 19.799px;
-    background: $text;
-    transform: rotate(-45deg);
-    transform-origin: bottom left;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
 }
