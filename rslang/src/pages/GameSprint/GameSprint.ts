@@ -46,10 +46,16 @@ export class SprintGame {
       await this.getWordsFromCommonBase(this.initialValue.level) :
       await this.getWordsFromTextbook(this.initialValue.level, this.initialValue.page);
 
-      this.control.maxPage = this.arrWords.length;
-      this.control.maxWordsPage = this.arrWords[0].length;
+    console.log(this.arrWords);
 
-      console.log(this.arrWords);
+    if (!this.arrWords[0].length) {
+      alert('На данной странице все слова изучены');
+      window.history.back();
+      return
+    }
+
+    this.control.maxPage = this.arrWords.length;
+    this.control.maxWordsPage = this.arrWords[0].length;
 
     this.drawPage();
     this.listen();
@@ -115,7 +121,7 @@ export class SprintGame {
             <div class="popup-sprint__bottom">
               <div class="popup-sprint__btns">
                 <button class="popup-sprint__btn-relay btn btn--primery" id="sprintStartAgain">Начать заново</button>
-                <button class="popup-sprint__btn-exit btn" id="backToGames">К списку игр</button>
+                <button class="popup-sprint__btn-exit btn" id="backToGames">Вернуться назад</button>
               </div>
             </div>
           </div>
@@ -152,7 +158,7 @@ export class SprintGame {
   private getHTMLCard() {
     const {countPage, countWord} = this.control;
     const {word, wordTranslate: translateTrue} = this.arrWords[countPage][countWord];
-    const {wordTranslate: translateFalse} = this.getRandomTranslate();
+    const {wordTranslate: translateFalse} = this.arrWords[0].length > 1 ? this.getRandomTranslate() : {wordTranslate: 'Экспекто патронум'};
     this.currentWordTranslateDisplay = (Math.random() > 0.5) ? translateTrue : translateFalse;
 
     return `
@@ -178,10 +184,22 @@ export class SprintGame {
   private async getWordsFromTextbook(level: number, page: number | undefined) {
     const arrWordsForGame = [];
     let cntPage = page as number;
+
+    if (level === 6) {
+      const hardWords = await this.learnWords.getUserAggrHardWords();
+      arrWordsForGame[0] = hardWords;
+      return arrWordsForGame;
+    }
+
+    const arrAggrNoLearnedWords = [];
     while (cntPage >= 0) {
-      arrWordsForGame.push(await this.learnWords.getWordsAPI(level, cntPage));
+      const noLearnedWordsOnPage = await this.learnWords.getUserAggrNoLearnedWords(level, cntPage);
+      arrAggrNoLearnedWords.push(noLearnedWordsOnPage);
       cntPage -= 1;
     }
+
+    arrWordsForGame[0] =arrAggrNoLearnedWords.flat();
+
     return arrWordsForGame;
   }
 
@@ -290,7 +308,7 @@ export class SprintGame {
       this.control.countPage += 1;
 
       if (this.control.countPage === maxPage) {
-        console.log('слова закончились');
+        console.log('the words ended');
         return false;
       }
     }
@@ -355,9 +373,6 @@ export class SprintGame {
       this.closeGame();
       document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
       window.history.back();
-      // import('../Games/Games')
-      //   .then(component => new component.Games().init())
-      //   .catch(err => console.log(err));
     }
   }
 

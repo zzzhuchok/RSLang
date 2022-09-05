@@ -114,6 +114,11 @@
   & svg {
     fill: $white;
   }
+
+  & svg:hover path {
+    fill: $white;
+    transform: none;
+  }
 }
 
 
