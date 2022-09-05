@@ -177,7 +177,7 @@ export class SprintGame {
 
   private async getWordsFromTextbook(level: number, page: number | undefined) {
     const arrWordsForGame = [];
-    let cntPage = (page) ? page : -1;
+    let cntPage = page as number;
     while (cntPage >= 0) {
       arrWordsForGame.push(await this.learnWords.getWordsAPI(level, cntPage));
       cntPage -= 1;
@@ -257,16 +257,21 @@ export class SprintGame {
   }
 
   private finishGame(): void {
-    window.clearTimeout(this.timerFinish);
-    window.clearInterval(this.timerClock);
-    document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
-    document.querySelector('.game-sprint__wrapper')?.classList.add('hidden');
+    try {
+      window.clearTimeout(this.timerFinish);
+      window.clearInterval(this.timerClock);
+      document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
+      document.querySelector('.game-sprint__wrapper')?.classList.add('hidden');
 
-    const popup = document.querySelector('.game-sprint__popup') as HTMLElement;
-    popup.classList.remove('hidden');
+      const popup = document.querySelector('.game-sprint__popup') as HTMLElement;
+      popup.classList.remove('hidden');
 
-    this.drawAnswersInPopup();
-    console.log('finish GAME');
+      this.drawAnswersInPopup();
+      console.log('finish GAME');
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private closeGame(): void {
@@ -349,9 +354,10 @@ export class SprintGame {
     if (elem.closest('#backToGames') || elem.closest('#btnCloseSprint')) {
       this.closeGame();
       document.removeEventListener('keydown', this.handlePageGameSprintKeydown);
-      import('../Games/Games')
-        .then(component => new component.Games().init())
-        .catch(err => console.log(err));
+      window.history.back();
+      // import('../Games/Games')
+      //   .then(component => new component.Games().init())
+      //   .catch(err => console.log(err));
     }
   }
 

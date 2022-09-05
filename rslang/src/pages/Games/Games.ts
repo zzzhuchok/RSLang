@@ -61,23 +61,12 @@ export class Games {
 
 
   /* HANDLERS */
-  handleBtnLevelsClick = (evt: Event) => {
-    evt.preventDefault();
-    const elem = evt.target as HTMLElement;
 
-    if (elem.hasAttribute('data-page-words')) {
-
-      const level = Number(elem.dataset.pageWords);
-      import('../GameSprint/GameSprint')
-        .then(component => {
-          const sprintGame = new component.SprintGame({state: 'games', level});
-          sprintGame.init().catch(err => console.log(err));
-        })
-        .catch((err) => console.log(err));
-    }
-  }
+  // handleControlKeysBrowser = (evt: Event) => {
+  //   console.log(evt);
+  // }
 
   listen() {
-    document.querySelector('#sectionGames')?.addEventListener('click', this.handleBtnLevelsClick);
+    // window.addEventListener('popstate', this.handleControlKeysBrowser)
   }
 }
