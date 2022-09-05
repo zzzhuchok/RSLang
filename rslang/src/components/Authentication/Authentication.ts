@@ -50,7 +50,9 @@ export class Authentication {
         <p class="form__text">
           ${prevLinkText} <a class="form__link form__link--bold" href="./" id="${linkId}">${linkText}</a>
         </p>
-        <div class="form__btn-closed"></div>
+        <div class="form__btn-closed">
+          <img src="./icons/close.svg" alt="closed">
+        </div>
       </form>
     `;
   }
@@ -83,10 +85,11 @@ export class Authentication {
     if (result) btn.disabled = false;
   }
 
-  registerUser = async (name: string, email: string, password: string): Promise<void> => {
+  registerUser = async (name: string, email: string, password: string): Promise<boolean | undefined> => {
     try {
       await this.learnWordsAPI.createUserAPI({name, email, password});
-      await this.loginUser(email, password);
+      const res = await this.loginUser(email, password);
+      return res;
     } catch (err) {
       if (err instanceof HttpError) {
         if (err.statusCode === 417) {
@@ -100,10 +103,9 @@ export class Authentication {
     }
   }
 
-  loginUser = async (email: string, password: string): Promise<void> => {
+  loginUser = async (email: string, password: string): Promise<boolean | undefined> => {
     try {
       const userData = {...await this.learnWordsAPI.loginUserAPI({email, password})};
-
       if (userData?.message === 'Authenticated') {
         document.getElementById('popupFormAuth')?.classList.add('hidden');
         this.localStore.setUser(userData);
@@ -115,6 +117,7 @@ export class Authentication {
 
         (document.getElementById('login') as HTMLButtonElement).classList.add('hidden');
         (document.getElementById('registration') as HTMLButtonElement).classList.add('hidden');
+        return true;
       }
     } catch (err) {
       if (err instanceof HttpError) {
@@ -160,7 +163,7 @@ export class Authentication {
     const form = elem.closest('.form') as HTMLElement;
     const name = (document.querySelector('[data-type-input="name"]') as HTMLInputElement);
 
-    if (elem.classList.contains('form__btn-closed')) {
+    if (elem.closest('.form__btn-closed')) {
       document.querySelector('.popup__form-authentication')?.classList.add('hidden');
     }
 
@@ -180,12 +183,16 @@ export class Authentication {
         btn.innerText = 'Ожидайте...';
 
         document.querySelector('.form')?.removeEventListener('click', this.handleFormClick);
-        await this.registerUser(nameUser, email, pass).catch((err: Error) => console.log(err.message));
+        const res = await this.registerUser(nameUser, email, pass).catch((err: Error) => console.log(err.message));
         document.querySelector('.form')?.addEventListener('click', this.handleFormClick);
 
 
         btn.innerText = 'Регистрация';
         btn.disabled = false;
+
+        if (res) {
+          window.location.reload();
+        }
       }
 
       if (btn.id === 'btnLog') {
@@ -193,11 +200,15 @@ export class Authentication {
         btn.innerText = 'Ожидайте...';
 
         document.querySelector('.form')?.removeEventListener('click', this.handleFormClick);
-        await this.loginUser(email, pass).catch((err: Error) => console.log(err.message));
+        const res = await this.loginUser(email, pass).catch((err: Error) => console.log(err.message));
         document.querySelector('.form')?.addEventListener('click', this.handleFormClick);
 
         btn.innerText = 'Войти';
         btn.disabled = false;
+
+        if (res) {
+          window.location.reload();
+        }
       }
     }
   }

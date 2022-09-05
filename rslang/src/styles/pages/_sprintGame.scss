@@ -113,6 +113,11 @@
   & svg {
     fill: $white;
   }
+
+  & svg:hover path {
+    fill: $white;
+    transform: none;
+  }
 }
 
 .game-sprint__popup {

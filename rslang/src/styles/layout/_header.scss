@@ -12,8 +12,18 @@
 .header__nav {
   display: flex;
   column-gap: 60px;
+
+  @media screen and (max-width: $point_2) {
+    display: none;
+    column-gap: 30px;
+  }
+
+  @media screen and (max-width: $point_3) {
+
+  }
 }
 .header__nav-link {
+  padding: 15px 0;
   color: $text;
   transition: color 0.2s ease-in-out;
 
@@ -24,8 +34,12 @@
 }
 .header__auth {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   column-gap: 10px;
-  padding: 0 10px;
+  padding: 0 15px;
+
+  @media screen and (max-width: $point_2) {
+    flex-grow: 1;
+  }
 }

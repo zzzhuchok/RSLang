@@ -84,6 +84,6 @@ export class Games {
   }
 
   listen() {
-    document.querySelector('#sectionGames')?.addEventListener('click', this.handleBtnLevelsClick);
+    // window.addEventListener('popstate', this.handleControlKeysBrowser)
   }
 }
