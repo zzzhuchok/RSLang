@@ -70,6 +70,7 @@ export class Header {
 
       if (elem.closest("#logout")?.id === "logout") {
         this.authentication.logoutUser();
+        window.location.reload();
       }
     }
   };
