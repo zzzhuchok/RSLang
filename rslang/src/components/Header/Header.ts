@@ -47,6 +47,9 @@ export class Header {
             <img src="./icons/logout.svg" alt="">
           </button>
         </div>
+        <button class="burger" type="button" id="burger">
+          <span>burger</span>
+        </button>
       </div>
     `;
   };
